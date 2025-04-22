@@ -2,7 +2,49 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VO2MaxMonitor.Views.MeasurementDetailView">
-    Welcome to Avalonia!
+             xmlns:vm="clr-namespace:VO2MaxMonitor.ViewModels"
+             mc:Ignorable="d"
+             x:Class="VO2MaxMonitor.Views.MeasurementDetailView"
+             x:DataType="vm:MeasurementDetailViewModel">
+    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            CornerRadius="8"
+            Padding="24"
+            Margin="16"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
+        <StackPanel Spacing="16" HorizontalAlignment="Center">
+            <!-- Exercise Type -->
+            <TextBlock Text="{Binding MeasurementVm.ExerciseType}" 
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+            
+            <!-- VO2Max Value -->
+            <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}" 
+                       FontSize="48"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+            
+            <!-- Metadata -->
+            <StackPanel Orientation="Horizontal" 
+                        Spacing="24"
+                        HorizontalAlignment="Center">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Weight"
+                               FontSize="12"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                    <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
+                               FontSize="14"/>
+                </StackPanel>
+                
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Date"
+                               FontSize="12"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                    <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
+                               FontSize="14"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Border>
 </UserControl>

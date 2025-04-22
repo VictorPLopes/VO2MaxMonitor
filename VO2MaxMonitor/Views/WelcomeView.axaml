@@ -1,8 +1,18 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="VO2MaxMonitor.Views.WelcomeView">
-    Welcome to Avalonia!
+
+    <Border Padding="32"
+            MaxWidth="600"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            CornerRadius="16"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+        
+        <TextBlock Text="Select a measurement or create a new one"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"/>
+    </Border>
 </UserControl>

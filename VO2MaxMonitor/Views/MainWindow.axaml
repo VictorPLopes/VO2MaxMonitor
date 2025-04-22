@@ -1,20 +1,77 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:VO2MaxMonitor.ViewModels"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="600"
         x:Class="VO2MaxMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="VO2MaxMonitor">
+        Title="V̇O₂ Max Monitor"
+        TransparencyLevelHint="Mica"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="32"
+        ExtendClientAreaChromeHints="Default"
+        SystemDecorations="Full"
+        WindowStartupLocation="CenterOwner">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <!-- App Layout -->
+    <DockPanel Margin="24">
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        
+        <!-- Sidebar -->
+        <Border DockPanel.Dock="Left" Width="260" Margin="0,0,8,0">
+            <DockPanel>
+                <!-- Top section -->
+                <StackPanel DockPanel.Dock="Top" Spacing="16">
+                    <TextBlock Text="V̇O₂ Max Monitor"
+                               Theme="{StaticResource TitleTextBlockStyle}"/>
+                    <Button Content="＋ New Measurement"
+                            Command="{Binding AddMeasurementCommand}"
+                            HorizontalAlignment="Stretch"
+                            FontSize="14"
+                            Padding="8"
+                            CornerRadius="8"/>
+                </StackPanel>
 
+                <!-- Measurement History -->
+                <ScrollViewer>
+                    <ListBox ItemsSource="{Binding Measurements}"
+                             SelectedItem="{Binding SelectedMeasurement}"
+                             BorderThickness="0"
+                             Margin="0,16,0,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,4" Padding="12"
+                                        Background="{DynamicResource ThemeBackgroundBrush}"
+                                        CornerRadius="8">
+                                    <TextBlock Text="{Binding FormattedDate}" FontSize="14"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Border Margin="8,0,0,0" >
+            <ContentControl Content="{Binding CurrentView}" />
+        </Border>
+
+    </DockPanel>
 </Window>

@@ -2,7 +2,52 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VO2MaxMonitor.Views.NewMeasurementView">
-    Welcome to Avalonia!
+             xmlns:vm="clr-namespace:VO2MaxMonitor.ViewModels"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             mc:Ignorable="d"
+             x:Class="VO2MaxMonitor.Views.NewMeasurementView"
+             x:DataType="vm:NewMeasurementViewModel">
+    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            CornerRadius="8"
+            Padding="24"
+            Margin="16"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
+        <StackPanel Spacing="16" Width="400">
+            <TextBlock Text="New Measurement"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
+            
+            <!-- Exercise Type -->
+            <TextBox Watermark="Exercise Type"
+                        Text="{Binding ExerciseType}"/>
+            
+            <!-- Weight -->
+            <TextBox Watermark="Weight (kg)"
+                        Text="{Binding WeightKg}"/>
+            
+            <!-- File Selection -->
+            <Button Content="Select CSV File" 
+                    Command="{Binding SelectCsvCommand}"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="4"/>
+            
+            <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    CornerRadius="4"
+                    Padding="8">
+                <TextBlock Text="{Binding FilePath}" 
+                           TextWrapping="Wrap"
+                           FontSize="12"/>
+            </Border>
+            
+            <!-- Compute Button -->
+            <Button Content="Compute VO₂ Max" 
+                    Command="{Binding ComputeCommand}"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,16,0,0"
+                    CornerRadius="4"
+                    FontWeight="SemiBold"/>
+        </StackPanel>
+    </Border>
 </UserControl>

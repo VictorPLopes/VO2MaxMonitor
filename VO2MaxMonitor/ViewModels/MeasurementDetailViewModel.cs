@@ -1,6 +1,8 @@
-﻿namespace VO2MaxMonitor.ViewModels;
+﻿using VO2MaxMonitor.Models;
 
-public class MeasurementDetailViewModel
+namespace VO2MaxMonitor.ViewModels;
+
+public class MeasurementDetailViewModel(MeasurementViewModel measurementVm) : ViewModelBase
 {
-    
+    public MeasurementViewModel MeasurementVm { get; } = measurementVm;
 }
