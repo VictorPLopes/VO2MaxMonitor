@@ -7,7 +7,7 @@ using VO2MaxMonitor.Models;
 
 namespace VO2MaxMonitor.Services;
 
-public class MeasurementsFileService : IMeasurementsFileService
+public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
 {
     // TODO: Implement different files for different users.
     // For now, we will use a single file (and a single user) with a fixed name.

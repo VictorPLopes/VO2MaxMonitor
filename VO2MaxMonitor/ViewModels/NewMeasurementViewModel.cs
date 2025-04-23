@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using VO2MaxMonitor.Models;
 
@@ -62,11 +63,12 @@ public class NewMeasurementViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> ComputeCommand   { get; }
 
     // Command methods
-    private async Task SelectCsvFileAsync() =>
-        // TODO: Implement file selection dialog
-        FilePath = "PLACEHOLDER_CSV_PATH"; // Replace with actual file path
+    [RelayCommand]
+    private async Task SelectCsvFileAsync()
+    {
+        
+    }
 
-    //
     private void ComputeVo2Max()
     {
         // TODO: Implement VO2Max computation logic

@@ -4,7 +4,7 @@ using VO2MaxMonitor.Models;
 
 namespace VO2MaxMonitor.Services;
 
-public interface IMeasurementsFileService
+public interface IMeasurementsJsonFilesService
 {
     Task                            SaveToFileAsync(IEnumerable<Measurement> itemsToSave);
     Task<IEnumerable<Measurement>?> LoadFromFileAsync();

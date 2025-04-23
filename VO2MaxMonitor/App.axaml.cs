@@ -24,7 +24,8 @@ public class App : Application
         var services = new ServiceCollection();
         
         // Register services and view models
-        services.AddSingleton<IMeasurementsFileService, MeasurementsFileService>();
+        services.AddSingleton<IMeasurementsJsonFilesService, MeasurementsJsonFilesService>();
+        services.AddSingleton<IFilesService, CsvFilesService>();
         services.AddSingleton<MainWindowViewModel>();
 
         // Build the provider
@@ -53,7 +54,7 @@ public class App : Application
     // Load data from disc
     private async Task InitMainViewModelAsync(MainWindowViewModel vm)
     {
-        var fileService = _serviceProvider!.GetRequiredService<IMeasurementsFileService>();
+        var fileService = _serviceProvider!.GetRequiredService<IMeasurementsJsonFilesService>();
         // get the items to load
         var itemsLoaded = await fileService.LoadFromFileAsync();
 
@@ -74,7 +75,7 @@ public class App : Application
 
         if (_canClose) return;
         // To save the items, we map them to the ToDoItem-Model which is better suited for I/O operations
-        var fileService = _serviceProvider!.GetRequiredService<IMeasurementsFileService>();
+        var fileService = _serviceProvider!.GetRequiredService<IMeasurementsJsonFilesService>();
         var itemsToSave = vm.Measurements.Select(item => item.Model);
         await fileService.SaveToFileAsync(itemsToSave);
 
