@@ -11,9 +11,11 @@ public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
 {
     // TODO: Implement different files for different users.
     // For now, we will use a single file (and a single user) with a fixed name.
-    private readonly string _jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VO2MaxMonitor", "measurements.json");
-    
-    
+    private readonly string _jsonFilePath =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VO2MaxMonitor",
+                     "measurements.json");
+
+
     // Saves the measurements to a JSON file.
     public async Task SaveToFileAsync(IEnumerable<Measurement> itemsToSave)
     {
@@ -29,7 +31,7 @@ public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
             throw;
         }
     }
-    
+
     // Loads the measurements from a JSON file.
     public async Task<IEnumerable<Measurement>?> LoadFromFileAsync()
     {

@@ -1,7 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:VO2MaxMonitor.ViewModels"
-        xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="600"
@@ -32,20 +31,20 @@
                     MaterialOpacity="0.65" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        
+
         <!-- Sidebar -->
         <Border DockPanel.Dock="Left" Width="260" Margin="0,0,8,0">
             <DockPanel>
                 <!-- Top section -->
                 <StackPanel DockPanel.Dock="Top" Spacing="16">
                     <TextBlock Text="V̇O₂ Max Monitor"
-                               Theme="{StaticResource TitleTextBlockStyle}"/>
+                               Theme="{StaticResource TitleTextBlockStyle}" />
                     <Button Content="＋ New Measurement"
                             Command="{Binding AddMeasurementCommand}"
                             HorizontalAlignment="Stretch"
                             FontSize="14"
                             Padding="8"
-                            CornerRadius="8"/>
+                            CornerRadius="8" />
                 </StackPanel>
 
                 <!-- Measurement History -->
@@ -59,7 +58,7 @@
                                 <Border Margin="0,4" Padding="12"
                                         Background="{DynamicResource ThemeBackgroundBrush}"
                                         CornerRadius="8">
-                                    <TextBlock Text="{Binding FormattedDate}" FontSize="14"/>
+                                    <TextBlock Text="{Binding FormattedDate}" FontSize="14" />
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -69,7 +68,7 @@
         </Border>
 
         <!-- Main Content Area -->
-        <Border Margin="8,0,0,0" >
+        <Border Margin="8,0,0,0">
             <ContentControl Content="{Binding CurrentView}" />
         </Border>
 

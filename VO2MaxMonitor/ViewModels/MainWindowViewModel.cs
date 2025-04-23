@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
 using ReactiveUI;
-using VO2MaxMonitor.Models;
 
 namespace VO2MaxMonitor.ViewModels;
 
@@ -10,10 +9,11 @@ public class MainWindowViewModel : ViewModelBase
     // Private fields
     // View shown in the content area of the main window
     private ViewModelBase _currentView;
+
     // Current selected measurement
     private MeasurementViewModel? _selectedMeasurement;
 
-    
+
     // Constructor
     public MainWindowViewModel()
     {
@@ -21,11 +21,11 @@ public class MainWindowViewModel : ViewModelBase
         CurrentView           = new WelcomeViewModel(); // Placeholder for empty state
     }
 
-    
+
     // List of saved measurements
     public ObservableCollection<MeasurementViewModel> Measurements { get; } = [];
-    
-    
+
+
     // Form bindable properties
     public ViewModelBase CurrentView
     {
@@ -41,14 +41,14 @@ public class MainWindowViewModel : ViewModelBase
             // Clear the previous selection
             if (_selectedMeasurement != null)
                 _selectedMeasurement.IsSelected = false;
-            
+
             this.RaiseAndSetIfChanged(ref _selectedMeasurement, value);
-            
+
             // Set the new selection
             if (value != null)
             {
                 value.IsSelected = true;
-                CurrentView = new MeasurementDetailViewModel(value);
+                CurrentView      = new MeasurementDetailViewModel(value);
             }
             else
             {
@@ -56,12 +56,12 @@ public class MainWindowViewModel : ViewModelBase
             }
         }
     }
-    
-    
-    // Commands
-    public ReactiveCommand<Unit, Unit>       AddMeasurementCommand { get; }
 
-    
+
+    // Commands
+    public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
+
+
     // Command Methods
     private void ShowNewMeasurementView() => CurrentView = new NewMeasurementViewModel(this);
 }

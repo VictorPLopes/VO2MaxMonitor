@@ -14,35 +14,35 @@
             VerticalAlignment="Center">
         <StackPanel Spacing="16" HorizontalAlignment="Center">
             <!-- Exercise Type -->
-            <TextBlock Text="{Binding MeasurementVm.ExerciseType}" 
+            <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
                        FontSize="16"
                        FontWeight="SemiBold"
-                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-            
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
             <!-- VO2Max Value -->
-            <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}" 
+            <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}"
                        FontSize="48"
                        FontWeight="Bold"
-                       HorizontalAlignment="Center"/>
-            
+                       HorizontalAlignment="Center" />
+
             <!-- Metadata -->
-            <StackPanel Orientation="Horizontal" 
+            <StackPanel Orientation="Horizontal"
                         Spacing="24"
                         HorizontalAlignment="Center">
                 <StackPanel Spacing="4">
                     <TextBlock Text="Weight"
                                FontSize="12"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                     <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
-                               FontSize="14"/>
+                               FontSize="14" />
                 </StackPanel>
-                
+
                 <StackPanel Spacing="4">
                     <TextBlock Text="Date"
                                FontSize="12"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                     <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
-                               FontSize="14"/>
+                               FontSize="14" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>

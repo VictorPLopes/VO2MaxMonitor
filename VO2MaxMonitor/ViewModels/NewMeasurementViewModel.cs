@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using VO2MaxMonitor.Models;
+using VO2MaxMonitor.Services;
 
 namespace VO2MaxMonitor.ViewModels;
 
@@ -57,16 +58,30 @@ public class NewMeasurementViewModel : ViewModelBase
         get => _filePath;
         private set => this.RaiseAndSetIfChanged(ref _filePath, value);
     }
-    
+
     // Commands
     public ReactiveCommand<Unit, Unit> SelectCsvCommand { get; }
     public ReactiveCommand<Unit, Unit> ComputeCommand   { get; }
 
     // Command methods
-    [RelayCommand]
     private async Task SelectCsvFileAsync()
     {
-        
+        try
+        {
+            var filesService = App.Current?.Services?.GetRequiredService<IFilesService>();
+            if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
+
+            var file = await filesService.OpenFileAsync();
+            if (file is null) return;
+            
+            // Get the file path
+            FilePath = file.Path.AbsolutePath;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private void ComputeVo2Max()
@@ -76,7 +91,7 @@ public class NewMeasurementViewModel : ViewModelBase
         var rand = new Random(); // Placeholder for actual VO2Max computation
         var measurement =
             new Measurement(20 + rand.NextDouble() * 40.0, _weightKg, _exerciseType); // Placeholder VO2Max value
-        
+
         // Add the new measurement to the main view model
         var measurementVm = new MeasurementViewModel(measurement);
 

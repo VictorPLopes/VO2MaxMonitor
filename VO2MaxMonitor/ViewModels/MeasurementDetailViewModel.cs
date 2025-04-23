@@ -1,6 +1,4 @@
-﻿using VO2MaxMonitor.Models;
-
-namespace VO2MaxMonitor.ViewModels;
+﻿namespace VO2MaxMonitor.ViewModels;
 
 public class MeasurementDetailViewModel(MeasurementViewModel measurementVm) : ViewModelBase
 {

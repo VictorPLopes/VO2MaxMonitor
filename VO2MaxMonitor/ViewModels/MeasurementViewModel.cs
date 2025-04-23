@@ -8,7 +8,7 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
 {
     // Private fields
     private bool _isSelected;
-    
+
     // Model access
     public Measurement Model => model;
 
@@ -17,7 +17,7 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
     public string FormattedVO2Max   => $"{model.VO2Max:F2} ml/min/kg";
     public string ExerciseType      => model.ExerciseType ?? string.Empty;
     public string FormattedWeightKg => $"{model.WeightKg} kg";
-    
+
     // Selection state
     public bool IsSelected
     {
@@ -26,7 +26,7 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
     }
 
     // Commands
-    public ReactiveCommand<Unit, Unit> DeleteCommand { get; } = ReactiveCommand.Create(() => 
+    public ReactiveCommand<Unit, Unit> DeleteCommand { get; } = ReactiveCommand.Create(() =>
     {
         // TODO: Implement deletion logic
     });
