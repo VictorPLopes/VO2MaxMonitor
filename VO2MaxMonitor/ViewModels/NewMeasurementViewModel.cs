@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
+using CsvHelper;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using VO2MaxMonitor.Models;
@@ -86,7 +89,14 @@ public class NewMeasurementViewModel : ViewModelBase
 
     private void ComputeVo2Max()
     {
-        // TODO: Implement VO2Max computation logic
+        // Read the CSV file from the file path
+        using (var reader = new StreamReader(FilePath))
+            using (var csv = new CsvReader(reader, CultureInfo.CurrentCulture))
+            {
+                var readings = csv.GetRecords<Reading>();
+                // TODO: Implement VO2Max computation logic
+            }
+        
         // For now, just create a new measurement and add it to the main view model
         var rand = new Random(); // Placeholder for actual VO2Max computation
         var measurement =
