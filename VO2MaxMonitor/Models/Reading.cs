@@ -6,4 +6,4 @@ public readonly record struct Reading(
     double O2,
     double DifferentialPressure,
     ulong  TimeStamp
-    );
+);

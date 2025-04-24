@@ -41,7 +41,7 @@ public class App : Application
             {
                 DataContext = mainVm
             };
-            
+
             // Now that MainWindow exists, register CsvFilesService
             services.AddSingleton<IFilesService>(x => new CsvFilesService(desktop.MainWindow));
 
