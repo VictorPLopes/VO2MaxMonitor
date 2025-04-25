@@ -46,7 +46,7 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
         if (weightKg <= 0)
             throw new ArgumentException("Weight must be positive");
 
-        // Start timer
+        // Start the timer
         var startTime = readings.First().TimeStamp;
         var timer = new Timer
         {
@@ -54,11 +54,11 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
             flow = startTime
         };
 
-        // Initialize variables
-        var totalVolume = 0.0;
-        var vO2Max      = 0.0;
+        // Initialize variables.
+        var totalVolume = 0.0; // Accumulated volume in liters
+        var vO2Max      = 0.0; // Maximum recorded VO₂ (ml/min/kg)
 
-        // Process each reading
+        // Process each reading.
         foreach (var reading in readings)
         {
             // 1. Compute airflow if differential pressure indicates breathing
@@ -73,11 +73,11 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
                 timer.flow  =  reading.TimeStamp;
             }
 
-            // 2. Compute V̇O₂ periodically
+            // 2. Periodic VO₂ max computation
             if (reading.TimeStamp - timer.vo2 <= vO2ComputationInterval) continue;
             vO2Max = Math.Max(ComputeVO2(totalVolume, reading.O2, weightKg), vO2Max);
 
-            // Reset for next interval
+            // Reset for the next iteration
             totalVolume = 0.0;
             timer.vo2   = reading.TimeStamp;
         }
