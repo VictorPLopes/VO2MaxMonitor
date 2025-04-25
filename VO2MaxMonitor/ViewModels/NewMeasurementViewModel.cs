@@ -91,16 +91,18 @@ public class NewMeasurementViewModel : ViewModelBase
     {
         // Read the CSV file from the file path
         using (var reader = new StreamReader(FilePath))
+        {
             using (var csv = new CsvReader(reader, CultureInfo.CurrentCulture))
             {
                 var readings = csv.GetRecords<Reading>();
-                // TODO: Implement VO2Max computation logic
+                // TODO: Implement V̇O₂ max computation logic
             }
-        
+        }
+
         // For now, just create a new measurement and add it to the main view model
-        var rand = new Random(); // Placeholder for actual VO2Max computation
+        var rand = new Random(); // Placeholder for actual V̇O₂ max computation
         var measurement =
-            new Measurement(20 + rand.NextDouble() * 40.0, _weightKg, _exerciseType); // Placeholder VO2Max value
+            new Measurement(20 + rand.NextDouble() * 40.0, _weightKg, _exerciseType); // Placeholder V̇O₂ max value
 
         // Add the new measurement to the main view model
         var measurementVm = new MeasurementViewModel(measurement);

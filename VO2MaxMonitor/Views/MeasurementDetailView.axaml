@@ -19,7 +19,7 @@
                        FontWeight="SemiBold"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
-            <!-- VO2Max Value -->
+            <!-- V̇O₂ max Value -->
             <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}"
                        FontSize="48"
                        FontWeight="Bold"
