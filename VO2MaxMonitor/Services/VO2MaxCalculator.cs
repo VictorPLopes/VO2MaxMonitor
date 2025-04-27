@@ -50,8 +50,8 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
         var startTime = readings.First().TimeStamp;
         var timer = new Timer
         {
-            vo2  = startTime,
-            flow = startTime
+            VO2  = startTime,
+            Flow = startTime
         };
 
         // Initialize variables.
@@ -64,22 +64,22 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
             // 1. Compute airflow if differential pressure indicates breathing
             if (reading.DifferentialPressure > 1.0)
             {
-                var deltaTime = (reading.TimeStamp - timer.flow) / 1000.0; // Convert to seconds
+                var deltaTime = (reading.TimeStamp - timer.Flow) / 1000.0; // Convert to seconds
                 var flowRate = ComputeAirflow(
                                               reading.DifferentialPressure,
                                               reading.VenturiAreaRegular,
                                               reading.VenturiAreaConstricted);
                 totalVolume += flowRate * deltaTime; // Integrate to get volume (m³)
-                timer.flow  =  reading.TimeStamp;
+                timer.Flow  =  reading.TimeStamp;
             }
 
             // 2. Periodic VO₂ max computation
-            if (reading.TimeStamp - timer.vo2 <= vO2ComputationInterval) continue;
+            if (reading.TimeStamp - timer.VO2 <= vO2ComputationInterval) continue;
             vO2Max = Math.Max(ComputeVO2(totalVolume, reading.O2, weightKg), vO2Max);
 
             // Reset for the next iteration
             totalVolume = 0.0;
-            timer.vo2   = reading.TimeStamp;
+            timer.VO2   = reading.TimeStamp;
         }
 
         return vO2Max;
@@ -138,11 +138,11 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
         /// <summary>
         ///     Timestamp of the last V̇O₂ computation in milliseconds.
         /// </summary>
-        public ulong vo2;
+        public ulong VO2;
 
         /// <summary>
         ///     Timestamp of the last airflow computation in milliseconds.
         /// </summary>
-        public ulong flow;
+        public ulong Flow;
     }
 }
