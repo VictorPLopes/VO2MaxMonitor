@@ -13,11 +13,11 @@ namespace VO2MaxMonitor.Services;
 ///     This class uses Bernoulli's equation for airflow calculations and the Haldane transformation
 ///     for oxygen consumption computations.
 /// </remarks>
-/// <param name="o2Density">Oxygen density in kg/m³ (must be positive).</param>
+/// <param name="airDensity">Air density in kg/m³ (must be positive).</param>
 /// <param name="airDryness">Correction factor for dry air.</param>
 /// <param name="ambientO2">Percentage of oxygen in ambient air (typically ~20.95).</param>
 /// <param name="vO2ComputationInterval">Time interval between V̇O₂ calculations in milliseconds.</param>
-public class VO2MaxCalculator(double o2Density, double airDryness, double ambientO2, uint vO2ComputationInterval)
+public class VO2MaxCalculator(double airDensity, double airDryness, double ambientO2, uint vO2ComputationInterval)
     : IVO2MaxCalculator
 {
     /// <summary>
@@ -94,9 +94,9 @@ public class VO2MaxCalculator(double o2Density, double airDryness, double ambien
     /// <returns>Airflow rate in cubic meters per second (m³/s).</returns>
     private double ComputeAirflow(double differentialPressure, double venturiAreaRegular, double venturiAreaConstricted)
     {
-        var numerator   = Math.Abs(differentialPressure) * 2.0 * o2Density;
+        var numerator   = Math.Abs(differentialPressure) * 2.0 * airDensity;
         var denominator = 1        / Math.Pow(venturiAreaConstricted, 2) - 1 / Math.Pow(venturiAreaRegular, 2);
-        return Math.Sqrt(numerator / denominator) / o2Density;
+        return Math.Sqrt(numerator / denominator) / airDensity;
     }
 
     /// <summary>
