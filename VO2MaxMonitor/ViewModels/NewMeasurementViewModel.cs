@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reactive;
@@ -17,13 +18,15 @@ public class NewMeasurementViewModel : ViewModelBase
     private readonly MainWindowViewModel _mainVm;
 
     // Form properties
-    private string _exerciseType = "Treadmill"; // Default value
-    private string _filePath     = string.Empty;
-    private double _weightKg;
+    private          string            _exerciseType = "Treadmill"; // Default value
+    private          string            _filePath     = string.Empty;
+    private readonly IVO2MaxCalculator _vO2Calculator;
+    private          double            _weightKg;
 
-    public NewMeasurementViewModel(MainWindowViewModel mainVm)
+    public NewMeasurementViewModel(MainWindowViewModel mainVm, IVO2MaxCalculator vO2Calculator)
     {
-        _mainVm = mainVm;
+        _mainVm        = mainVm;
+        _vO2Calculator = vO2Calculator;
         //_weightKg = mainVm.CurrentProfile?.WeightKg ?? 70.0; // TODO: Default to profile weight or 70kg
         _weightKg = 70.0; // Default weight for new measurement
 
@@ -37,7 +40,7 @@ public class NewMeasurementViewModel : ViewModelBase
 
         // Initialize commands
         SelectCsvCommand = ReactiveCommand.CreateFromTask(SelectCsvFileAsync);
-        ComputeCommand   = ReactiveCommand.Create(ComputeVo2Max, canCompute);
+        ComputeCommand   = ReactiveCommand.Create(ComputeVO2Max, canCompute);
     }
 
     // Form bindable properties
@@ -87,22 +90,29 @@ public class NewMeasurementViewModel : ViewModelBase
         }
     }
 
-    private void ComputeVo2Max()
+    private void ComputeVO2Max()
     {
+        IEnumerable<Reading> readings;
+
         // Read the CSV file from the file path
         using (var reader = new StreamReader(FilePath))
         {
             using (var csv = new CsvReader(reader, CultureInfo.CurrentCulture))
             {
-                var readings = csv.GetRecords<Reading>();
-                // TODO: Implement V̇O₂ max computation logic
+                readings = csv.GetRecords<Reading>();
             }
         }
 
-        // For now, just create a new measurement and add it to the main view model
+        // Calculate using the V̇O₂ max calculator service
+        var vO2Max = _vO2Calculator.Calculate(readings, _weightKg);
+
+        /*// For now, just create a new measurement and add it to the main view model
         var rand = new Random(); // Placeholder for actual V̇O₂ max computation
         var measurement =
-            new Measurement(20 + rand.NextDouble() * 40.0, _weightKg, _exerciseType); // Placeholder V̇O₂ max value
+            new Measurement(20 + rand.NextDouble() * 40.0, _weightKg, _exerciseType); // Placeholder V̇O₂ max value*/
+
+        // Create a new measurement object
+        var measurement = new Measurement(vO2Max, _weightKg, _exerciseType);
 
         // Add the new measurement to the main view model
         var measurementVm = new MeasurementViewModel(measurement);

@@ -1,31 +1,37 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using VO2MaxMonitor.Services;
 
 namespace VO2MaxMonitor.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
     // Private fields
-    // View shown in the content area of the main window
-    private ViewModelBase _currentView;
-
-    // Current selected measurement
-    private MeasurementViewModel? _selectedMeasurement;
-
+    private ViewModelBase _currentView; // View shown in the content area of the main window
+    private MeasurementViewModel? _selectedMeasurement; // Current selected measurement
+    private readonly IServiceProvider _services; // Dependency injection service provider
 
     // Constructor
-    public MainWindowViewModel()
+    public MainWindowViewModel(IServiceProvider services)
     {
+        _services = services;
+        
+        // Initialize with DI
+        AddMeasurementCommand = ReactiveCommand.Create(() => 
+        {
+            CurrentView = new NewMeasurementViewModel(this, _services.GetRequiredService<IVO2MaxCalculator>());
+        });
+        
         AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
         CurrentView           = new WelcomeViewModel(); // Placeholder for empty state
     }
 
-
     // List of saved measurements
     public ObservableCollection<MeasurementViewModel> Measurements { get; } = [];
-
-
+    
     // Form bindable properties
     public ViewModelBase CurrentView
     {
@@ -57,11 +63,9 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-
     // Commands
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
-
-
+    
     // Command Methods
-    private void ShowNewMeasurementView() => CurrentView = new NewMeasurementViewModel(this);
+    private void ShowNewMeasurementView() => CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
 }

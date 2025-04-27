@@ -26,6 +26,7 @@ public class App : Application
 
         // Register services and view models that do not depend on MainWindow
         services.AddSingleton<IMeasurementsJsonFilesService, MeasurementsJsonFilesService>();
+        services.AddSingleton<IVO2MaxCalculator, VO2MaxCalculator>();
         services.AddSingleton<MainWindowViewModel>();
 
         // Build a temporary provider to create the view model
