@@ -126,8 +126,8 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
         var vo2 = o2Consumption * 1000.0 / weightKg;
 
         // Validate plausible physiological values
-        // if (minuteVolume < 0.1 || o2 > 21.0 || o2 < 10.0)
-        //     return -1.0; // Error indicator (invalid measurement)
+        if (minuteVolume < 0.1 || o2 > 21.0 || o2 < 10.0)
+            return -1.0; // Error indicator (invalid measurement)
 
         return vo2;
     }
