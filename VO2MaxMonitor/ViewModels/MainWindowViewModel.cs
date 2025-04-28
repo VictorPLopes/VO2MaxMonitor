@@ -57,7 +57,7 @@ public class MainWindowViewModel : ViewModelBase
             if (value != null)
             {
                 value.IsSelected = true;
-                CurrentView      = new MeasurementDetailViewModel(value);
+                CurrentView      = new MeasurementDetailViewModel(value, this);
             }
             else
             {

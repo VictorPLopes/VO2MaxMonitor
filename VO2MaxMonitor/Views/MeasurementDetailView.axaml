@@ -45,6 +45,15 @@
                                FontSize="14" />
                 </StackPanel>
             </StackPanel>
+
+            <!-- Delete button -->
+            <Button Content="Delete"
+                    Command="{Binding DeleteCommand}"
+                    HorizontalAlignment="Center"
+                    Background="{DynamicResource DangerFillColorBrush}"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Padding="8,4"
+                    CornerRadius="4" />
         </StackPanel>
     </Border>
 </UserControl>

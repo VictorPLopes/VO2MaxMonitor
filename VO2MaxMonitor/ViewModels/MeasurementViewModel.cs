@@ -1,5 +1,4 @@
-﻿using System.Reactive;
-using ReactiveUI;
+﻿using ReactiveUI;
 using VO2MaxMonitor.Models;
 
 namespace VO2MaxMonitor.ViewModels;
@@ -24,10 +23,4 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
         get => _isSelected;
         set => this.RaiseAndSetIfChanged(ref _isSelected, value);
     }
-
-    // Commands
-    public ReactiveCommand<Unit, Unit> DeleteCommand { get; } = ReactiveCommand.Create(() =>
-    {
-        // TODO: Implement deletion logic
-    });
 }
