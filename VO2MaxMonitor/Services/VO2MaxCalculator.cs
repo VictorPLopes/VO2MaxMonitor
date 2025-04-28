@@ -64,12 +64,11 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
             // 1. Compute airflow if differential pressure indicates breathing
             if (reading.DifferentialPressure > 1.0)
             {
-                var deltaTime = reading.TimeStamp - timer.Flow;
                 var flowRate = ComputeAirflow(
                                               reading.DifferentialPressure,
                                               reading.VenturiAreaRegular,
                                               reading.VenturiAreaConstricted);
-                totalVolume += flowRate * deltaTime; // Integrate to get volume (m³)
+                totalVolume += flowRate * (reading.TimeStamp - timer.Flow) * 1000.0; // Integrate to get volume (m³)
             }
 
             timer.Flow = reading.TimeStamp;
@@ -95,9 +94,9 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
     /// <returns>Airflow rate in cubic meters per second (m³/s).</returns>
     private double ComputeAirflow(double differentialPressure, double venturiAreaRegular, double venturiAreaConstricted)
     {
-        var massFlow = 1000.0 * Math.Sqrt(Math.Abs(differentialPressure) * 2.0 * airDensity /
-                                          (1 / Math.Pow(venturiAreaConstricted, 2) -
-                                           1 / Math.Pow(venturiAreaRegular,     2)));
+        var massFlow = Math.Sqrt(Math.Abs(differentialPressure) * 2.0 * airDensity /
+                                 (1 / Math.Pow(venturiAreaConstricted, 2) -
+                                  1 / Math.Pow(venturiAreaRegular,     2)));
         return massFlow / airDensity; // Convert mass flow to volume flow
     }
 
@@ -120,7 +119,7 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
         var minuteVolume = volume * (60000.0 / vO2ComputationInterval) * airDryness / 1000.0;
 
         // Haldane Transformation
-        var o2Consumption = minuteVolume * (n2 * 0.265 - o2 / 100.0);
+        var o2Consumption = minuteVolume * (n2 / 100.0 * 0.265 - o2 / 100.0);
 
         // Conversion to ml/min/kg
         var vo2 = o2Consumption * 1000.0 / weightKg;
