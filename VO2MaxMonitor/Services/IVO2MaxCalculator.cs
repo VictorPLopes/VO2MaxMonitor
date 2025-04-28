@@ -5,5 +5,5 @@ namespace VO2MaxMonitor.Services;
 
 public interface IVO2MaxCalculator
 {
-    double Calculate(IEnumerable<Reading> readings, double weightKg);
+    double Calculate(List<Reading> readings, double weightKg);
 }

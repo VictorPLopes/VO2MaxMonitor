@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -16,12 +17,12 @@ public class NewMeasurementViewModel : ViewModelBase
 {
     // Main window view model reference
     private readonly MainWindowViewModel _mainVm;
+    private readonly IVO2MaxCalculator   _vO2Calculator;
 
     // Form properties
-    private          string            _exerciseType = "Treadmill"; // Default value
-    private          string            _filePath     = string.Empty;
-    private readonly IVO2MaxCalculator _vO2Calculator;
-    private          double            _weightKg;
+    private string _exerciseType = "Treadmill"; // Default value
+    private string _filePath     = string.Empty;
+    private double _weightKg;
 
     public NewMeasurementViewModel(MainWindowViewModel mainVm, IVO2MaxCalculator vO2Calculator)
     {
@@ -92,14 +93,14 @@ public class NewMeasurementViewModel : ViewModelBase
 
     private void ComputeVO2Max()
     {
-        IEnumerable<Reading> readings;
+        List<Reading> readings;
 
         // Read the CSV file from the file path
         using (var reader = new StreamReader(FilePath))
         {
-            using (var csv = new CsvReader(reader, CultureInfo.CurrentCulture))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                readings = csv.GetRecords<Reading>();
+                readings = csv.GetRecords<Reading>().ToList();
             }
         }
 

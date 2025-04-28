@@ -37,10 +37,10 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
     ///         </item>
     ///     </list>
     /// </exception>
-    public double Calculate(IEnumerable<Reading> readings, double weightKg)
+    public double Calculate(List<Reading> readings, double weightKg)
     {
         // Validate inputs
-        if (readings == null || !readings.Any())
+        if (readings == null || readings.Count == 0)
             throw new ArgumentException("No sensor readings provided");
 
         if (weightKg <= 0)
@@ -56,7 +56,7 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
 
         // Initialize variables.
         var totalVolume = 0.0; // Accumulated volume in liters
-        var vO2Max      = 0.0; // Maximum recorded VO₂ (ml/min/kg)
+        var vO2Max      = 0.0; // Maximum recorded V̇O₂ (ml/min/kg)
 
         // Process each reading.
         foreach (var reading in readings)
@@ -64,16 +64,17 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
             // 1. Compute airflow if differential pressure indicates breathing
             if (reading.DifferentialPressure > 1.0)
             {
-                var deltaTime = (reading.TimeStamp - timer.Flow) / 1000.0; // Convert to seconds
+                var deltaTime = reading.TimeStamp - timer.Flow;
                 var flowRate = ComputeAirflow(
                                               reading.DifferentialPressure,
                                               reading.VenturiAreaRegular,
                                               reading.VenturiAreaConstricted);
                 totalVolume += flowRate * deltaTime; // Integrate to get volume (m³)
-                timer.Flow  =  reading.TimeStamp;
             }
 
-            // 2. Periodic VO₂ max computation
+            timer.Flow = reading.TimeStamp;
+
+            // 2. Periodic V̇O₂ max computation
             if (reading.TimeStamp - timer.VO2 <= vO2ComputationInterval) continue;
             vO2Max = Math.Max(ComputeVO2(totalVolume, reading.O2, weightKg), vO2Max);
 
@@ -94,9 +95,10 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
     /// <returns>Airflow rate in cubic meters per second (m³/s).</returns>
     private double ComputeAirflow(double differentialPressure, double venturiAreaRegular, double venturiAreaConstricted)
     {
-        var numerator   = Math.Abs(differentialPressure) * 2.0 * airDensity;
-        var denominator = 1        / Math.Pow(venturiAreaConstricted, 2) - 1 / Math.Pow(venturiAreaRegular, 2);
-        return Math.Sqrt(numerator / denominator) / airDensity;
+        var massFlow = 1000.0 * Math.Sqrt(Math.Abs(differentialPressure) * 2.0 * airDensity /
+                                          (1 / Math.Pow(venturiAreaConstricted, 2) -
+                                           1 / Math.Pow(venturiAreaRegular,     2)));
+        return massFlow / airDensity; // Convert mass flow to volume flow
     }
 
     /// <summary>
@@ -115,17 +117,17 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
         var n2  = 100.0     - o2 - co2; // Remaining percentage assumed to be N₂
 
         // Volume corrected for a minute (L/min)
-        var minuteVolume = volume * (60000.0 / vO2ComputationInterval) * airDryness;
+        var minuteVolume = volume * (60000.0 / vO2ComputationInterval) * airDryness / 1000.0;
 
         // Haldane Transformation
-        var o2Consumption = minuteVolume * (n2 * 0.00265 - o2 / 100.0);
+        var o2Consumption = minuteVolume * (n2 * 0.265 - o2 / 100.0);
 
         // Conversion to ml/min/kg
         var vo2 = o2Consumption * 1000.0 / weightKg;
 
         // Validate plausible physiological values
-        if (minuteVolume < 0.1 || o2 > 21.0 || o2 < 10.0)
-            return -1.0; // Error indicator (invalid measurement)
+        // if (minuteVolume < 0.1 || o2 > 21.0 || o2 < 10.0)
+        //     return -1.0; // Error indicator (invalid measurement)
 
         return vo2;
     }

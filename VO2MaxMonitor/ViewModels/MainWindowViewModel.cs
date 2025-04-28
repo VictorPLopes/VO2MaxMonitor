@@ -9,29 +9,32 @@ namespace VO2MaxMonitor.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    // Private fields
-    private ViewModelBase _currentView; // View shown in the content area of the main window
-    private MeasurementViewModel? _selectedMeasurement; // Current selected measurement
     private readonly IServiceProvider _services; // Dependency injection service provider
+
+    // Private fields
+    private ViewModelBase         _currentView; // View shown in the content area of the main window
+    private MeasurementViewModel? _selectedMeasurement; // Current selected measurement
 
     // Constructor
     public MainWindowViewModel(IServiceProvider services)
     {
         _services = services;
-        
+
         // Initialize with DI
-        AddMeasurementCommand = ReactiveCommand.Create(() => 
+        AddMeasurementCommand = ReactiveCommand.Create(() =>
         {
-            CurrentView = new NewMeasurementViewModel(this, _services.GetRequiredService<IVO2MaxCalculator>());
+            CurrentView =
+                new NewMeasurementViewModel(this,
+                                            _services.GetRequiredService<IVO2MaxCalculator>());
         });
-        
+
         AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
         CurrentView           = new WelcomeViewModel(); // Placeholder for empty state
     }
 
     // List of saved measurements
     public ObservableCollection<MeasurementViewModel> Measurements { get; } = [];
-    
+
     // Form bindable properties
     public ViewModelBase CurrentView
     {
@@ -65,7 +68,8 @@ public class MainWindowViewModel : ViewModelBase
 
     // Commands
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
-    
+
     // Command Methods
-    private void ShowNewMeasurementView() => CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
+    private void ShowNewMeasurementView() =>
+        CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
 }
