@@ -8,7 +8,7 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="V̇O₂ Max Monitor"
-        TransparencyLevelHint="Mica"
+        TransparencyLevelHint="Mica, AcrylicBlur, Blur"
         Background="Transparent"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="32"
