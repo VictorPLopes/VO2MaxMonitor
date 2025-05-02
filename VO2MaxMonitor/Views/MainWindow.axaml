@@ -14,7 +14,11 @@
         ExtendClientAreaTitleBarHeightHint="32"
         ExtendClientAreaChromeHints="Default"
         SystemDecorations="Full"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Width="960"
+        Height="600"
+        MinWidth="854"
+        MinHeight="480">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
