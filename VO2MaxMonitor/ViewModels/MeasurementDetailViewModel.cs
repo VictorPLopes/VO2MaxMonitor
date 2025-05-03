@@ -1,36 +1,42 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using ReactiveUI;
 
 namespace VO2MaxMonitor.ViewModels;
 
+/// <summary>
+///     ViewModel for displaying detailed information about a measurement.
+/// </summary>
 public class MeasurementDetailViewModel : ViewModelBase
 {
-    // Private fields
     private readonly MainWindowViewModel _mainVm;
 
-    // Constructor
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MeasurementDetailViewModel" /> class.
+    /// </summary>
+    /// <param name="measurementVm">The measurement to display.</param>
+    /// <param name="mainVm">The main window ViewModel.</param>
     public MeasurementDetailViewModel(MeasurementViewModel measurementVm, MainWindowViewModel mainVm)
     {
-        MeasurementVm = measurementVm;
-        _mainVm       = mainVm;
+        MeasurementVm = measurementVm ?? throw new ArgumentNullException(nameof(measurementVm));
+        _mainVm       = mainVm        ?? throw new ArgumentNullException(nameof(mainVm));
 
-        // Initialize commands
         DeleteCommand = ReactiveCommand.Create(DeleteMeasurement);
     }
 
-    // Public properties
+    /// <summary>
+    ///     Gets the measurement being displayed.
+    /// </summary>
     public MeasurementViewModel MeasurementVm { get; }
 
-    // Commands
+    /// <summary>
+    ///     Gets the command for deleting this measurement.
+    /// </summary>
     public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
 
-    // Command methods
     private void DeleteMeasurement()
     {
-        // Remove the measurement from the main view model
         _mainVm.Measurements.Remove(MeasurementVm);
-
-        // Clear the selected measurement
         _mainVm.SelectedMeasurement = null;
     }
 }

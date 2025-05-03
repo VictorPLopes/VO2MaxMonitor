@@ -20,23 +20,7 @@ namespace VO2MaxMonitor.Services;
 public class VO2MaxCalculator(double airDensity, double airDryness, double ambientO2, uint vO2ComputationInterval)
     : IVO2MaxCalculator
 {
-    /// <summary>
-    ///     Calculates the maximum oxygen consumption (V̇O₂ max) from a series of sensor readings.
-    /// </summary>
-    /// <param name="readings">Collection of sensor readings. Must contain at least one reading.</param>
-    /// <param name="weightKg">Body mass of the subject in kilograms (must be positive).</param>
-    /// <returns>The maximum V̇O₂ value computed over the dataset (ml/min/kg).</returns>
-    /// <exception cref="ArgumentException">
-    ///     Thrown when:
-    ///     <list type="bullet">
-    ///         <item>
-    ///             <description>readings is null or empty</description>
-    ///         </item>
-    ///         <item>
-    ///             <description>weightKg is not positive</description>
-    ///         </item>
-    ///     </list>
-    /// </exception>
+    /// <inheritdoc />
     public double Calculate(List<Reading> readings, double weightKg)
     {
         // Validate inputs
@@ -75,7 +59,8 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
 
             // 2. Periodic V̇O₂ max computation
             if (reading.TimeStamp - timer.VO2 <= vO2ComputationInterval) continue;
-            vO2Max = Math.Max(ComputeVO2(totalVolume, reading.O2, weightKg), vO2Max);
+            vO2Max = Math.Max(ComputeVO2(totalVolume, reading.O2, weightKg),
+                              vO2Max); // If there's an error, the method will return -1, which will always be smaller than the previous value (and will be ignored)
 
             // Reset for the next iteration
             totalVolume = 0.0;

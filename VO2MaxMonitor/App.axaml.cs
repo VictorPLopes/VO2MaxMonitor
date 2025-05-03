@@ -12,88 +12,94 @@ using VO2MaxMonitor.Views;
 
 namespace VO2MaxMonitor;
 
+/// <summary>
+///     The main application class responsible for initialization and service configuration.
+/// </summary>
 public class App : Application
 {
-    private           bool              _canClose;
-    public new static App?              Current  => Application.Current as App;
-    public            IServiceProvider? Services { get; private set; }
+    private bool _canClose;
 
+    /// <summary>
+    ///     Gets the current application instance.
+    /// </summary>
+    public new static App? Current => Application.Current as App;
+
+    /// <summary>
+    ///     Gets the application's service provider.
+    /// </summary>
+    private IServiceProvider? Services { get; set; }
+
+    /// <inheritdoc />
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
+    /// <inheritdoc />
     public override async void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
 
-        // Register services and view models that do not depend on MainWindow
-        services.AddSingleton<IMeasurementsJsonFilesService, MeasurementsJsonFilesService>();
-        services.AddSingleton<IVO2MaxCalculator, VO2MaxCalculator>();
-        services.AddSingleton<MainWindowViewModel>();
-
-        // Build a temporary provider to create the view model
+        RegisterServices(services);
         Services = services.BuildServiceProvider();
-        var mainVm = Services.GetRequiredService<MainWindowViewModel>();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = mainVm
-            };
-
-            // Now that MainWindow exists, register CsvFilesService
-            services.AddSingleton<IFilesService>(x => new CsvFilesService(desktop.MainWindow));
-
-            // Rebuild ServiceProvider with the new service
-            Services = services.BuildServiceProvider();
-
-            // Hook shutdown logic
-            desktop.ShutdownRequested += (s, e) => DesktopOnShutdownRequested(s, e, mainVm);
+            InitializeMainWindow(desktop, services);
         }
 
-        // Init the MainViewModel
-        await InitMainViewModelAsync(mainVm);
+        await InitializeViewModelAsync();
         base.OnFrameworkInitializationCompleted();
     }
 
-    // Load data from disc
-    private async Task InitMainViewModelAsync(MainWindowViewModel vm)
+    private void RegisterServices(IServiceCollection services)
     {
-        var fileService = Services!.GetRequiredService<IMeasurementsJsonFilesService>();
-        // get the items to load
-        var itemsLoaded = await fileService.LoadFromFileAsync();
-
-        if (itemsLoaded is not null)
-            foreach (var item in itemsLoaded)
-                vm.Measurements.Add(new MeasurementViewModel(item));
+        services.AddSingleton<IMeasurementsJsonFilesService, MeasurementsJsonFilesService>();
+        services.AddSingleton<IVO2MaxCalculator>(_ =>
+                                                     new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
+        services.AddSingleton<MainWindowViewModel>();
     }
 
-    // We want to save our measurements before we actually shutdown the App. As File I/O is async, we need to wait until file is closed
-    // before we can actually close this window
-    private async void DesktopOnShutdownRequested(object? sender, ShutdownRequestedEventArgs e, MainWindowViewModel vm)
+    private void InitializeMainWindow(IClassicDesktopStyleApplicationLifetime desktop, IServiceCollection services)
     {
-        e.Cancel = !_canClose; // cancel closing event first time
+        var mainVm = Services!.GetRequiredService<MainWindowViewModel>();
+        desktop.MainWindow = new MainWindow { DataContext = mainVm };
 
+        services.AddSingleton<IFilesService>(_ => new CsvFilesService(desktop.MainWindow));
+        Services = services.BuildServiceProvider();
+
+        desktop.ShutdownRequested += OnShutdownRequested;
+    }
+
+    private async Task InitializeViewModelAsync()
+    {
+        var mainVm      = Services!.GetRequiredService<MainWindowViewModel>();
+        var fileService = Services.GetRequiredService<IMeasurementsJsonFilesService>();
+
+        var itemsLoaded = await fileService.LoadFromFileAsync();
+        if (itemsLoaded != null)
+            foreach (var item in itemsLoaded)
+                mainVm.Measurements.Add(new MeasurementViewModel(item));
+    }
+
+    private async void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+    {
+        e.Cancel = !_canClose;
         if (_canClose) return;
-        // To save the items, we map them to the ToDoItem-Model which is better suited for I/O operations
-        var fileService = Services!.GetRequiredService<IMeasurementsJsonFilesService>();
-        var itemsToSave = vm.Measurements.Select(item => item.Model);
-        await fileService.SaveToFileAsync(itemsToSave);
 
-        // Set _canClose to true and Close this Window again
+        var mainVm      = Services!.GetRequiredService<MainWindowViewModel>();
+        var fileService = Services.GetRequiredService<IMeasurementsJsonFilesService>();
+
+        await fileService.SaveToFileAsync(mainVm.Measurements.Select(m => m.Model));
         _canClose = true;
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) desktop.Shutdown();
     }
 
     private static void DisableAvaloniaDataAnnotationValidation()
     {
-        // Get an array of plugins to remove
-        var dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+        var pluginsToRemove = BindingPlugins.DataValidators
+                                            .OfType<DataAnnotationsValidationPlugin>()
+                                            .ToArray();
 
-        // remove each entry found
-        foreach (var plugin in dataValidationPluginsToRemove) BindingPlugins.DataValidators.Remove(plugin);
+        foreach (var plugin in pluginsToRemove) BindingPlugins.DataValidators.Remove(plugin);
     }
 }

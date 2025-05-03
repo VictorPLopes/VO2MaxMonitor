@@ -3,7 +3,16 @@ using Avalonia.Platform.Storage;
 
 namespace VO2MaxMonitor.Services;
 
+/// <summary>
+///     Provides file system operations for the application.
+/// </summary>
 public interface IFilesService
 {
-    public Task<IStorageFile?> OpenFileAsync();
+    /// <summary>
+    ///     Opens a file picker dialog to select a single file.
+    /// </summary>
+    /// <returns>
+    ///     The selected file or null if no file was selected.
+    /// </returns>
+    Task<IStorageFile?> OpenFileAsync();
 }

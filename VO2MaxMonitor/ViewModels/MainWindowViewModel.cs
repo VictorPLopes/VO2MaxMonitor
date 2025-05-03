@@ -7,53 +7,63 @@ using VO2MaxMonitor.Services;
 
 namespace VO2MaxMonitor.ViewModels;
 
+/// <summary>
+///     ViewModel for the main application window, managing the overall application state.
+/// </summary>
 public class MainWindowViewModel : ViewModelBase
 {
-    private readonly IServiceProvider _services; // Dependency injection service provider
+    private readonly IServiceProvider      _services;
+    private          ViewModelBase         _currentView;
+    private          MeasurementViewModel? _selectedMeasurement;
 
-    // Private fields
-    private ViewModelBase         _currentView; // View shown in the content area of the main window
-    private MeasurementViewModel? _selectedMeasurement; // Current selected measurement
-
-    // Constructor
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
+    /// </summary>
+    /// <param name="services">The service provider for dependency injection.</param>
     public MainWindowViewModel(IServiceProvider services)
     {
-        _services = services;
+        _services = services ?? throw new ArgumentNullException(nameof(services));
 
-        // Initialize with DI
+        // Initialize commands
         AddMeasurementCommand = ReactiveCommand.Create(() =>
         {
-            CurrentView =
-                new NewMeasurementViewModel(this,
-                                            _services.GetRequiredService<IVO2MaxCalculator>());
+            CurrentView = new NewMeasurementViewModel(
+                                                      this,
+                                                      _services.GetRequiredService<IVO2MaxCalculator>(),
+                                                      _services.GetRequiredService<IFilesService>()
+                                                     );
         });
 
-        AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
-        CurrentView           = new WelcomeViewModel(); // Placeholder for empty state
+        CurrentView = new WelcomeViewModel();
     }
 
-    // List of saved measurements
+    /// <summary>
+    ///     Gets the collection of measurements.
+    /// </summary>
     public ObservableCollection<MeasurementViewModel> Measurements { get; } = [];
 
-    // Form bindable properties
+    /// <summary>
+    ///     Gets or sets the currently displayed view.
+    /// </summary>
     public ViewModelBase CurrentView
     {
         get => _currentView;
         set => this.RaiseAndSetIfChanged(ref _currentView, value);
     }
 
+    /// <summary>
+    ///     Gets or sets the currently selected measurement.
+    /// </summary>
     public MeasurementViewModel? SelectedMeasurement
     {
         get => _selectedMeasurement;
         set
         {
-            // Clear the previous selection
             if (_selectedMeasurement != null)
                 _selectedMeasurement.IsSelected = false;
 
             this.RaiseAndSetIfChanged(ref _selectedMeasurement, value);
 
-            // Set the new selection
             if (value != null)
             {
                 value.IsSelected = true;
@@ -61,15 +71,13 @@ public class MainWindowViewModel : ViewModelBase
             }
             else
             {
-                CurrentView = new WelcomeViewModel(); // Placeholder for empty state
+                CurrentView = new WelcomeViewModel();
             }
         }
     }
 
-    // Commands
+    /// <summary>
+    ///     Gets the command for adding a new measurement.
+    /// </summary>
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
-
-    // Command Methods
-    private void ShowNewMeasurementView() =>
-        CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
 }
