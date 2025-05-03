@@ -19,7 +19,7 @@ public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
     // For now, we will use a single file (and a single user) with a fixed name.
     private readonly string _jsonFilePath = Path.Combine(
                                                          Environment.GetFolderPath(Environment.SpecialFolder
-                                                             .ApplicationData),
+                                                                  .ApplicationData),
                                                          "VO2MaxMonitor",
                                                          "measurements.json"
                                                         );
