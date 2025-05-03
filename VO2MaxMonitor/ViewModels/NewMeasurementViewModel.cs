@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using CsvHelper;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using VO2MaxMonitor.Models;
 using VO2MaxMonitor.Services;
@@ -32,12 +33,10 @@ public class NewMeasurementViewModel : ViewModelBase
     /// </summary>
     public NewMeasurementViewModel(
         MainWindowViewModel mainVm,
-        IVO2MaxCalculator   vo2Calculator,
-        IFilesService       filesService)
+        IVO2MaxCalculator   vo2Calculator)
     {
         _mainVm        = mainVm        ?? throw new ArgumentNullException(nameof(mainVm));
         _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
-        _filesService  = filesService  ?? throw new ArgumentNullException(nameof(filesService));
 
         var canCompute = this.WhenAnyValue(
                                            x => x.WeightKg,
@@ -96,8 +95,14 @@ public class NewMeasurementViewModel : ViewModelBase
     {
         try
         {
-            var file                   = await _filesService.OpenFileAsync();
-            if (file != null) FilePath = file.Path.AbsolutePath;
+            var filesService = App.Current?.Services?.GetRequiredService<IFilesService>();
+            if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
+
+            var file = await filesService.OpenFileAsync();
+            if (file is null) return;
+
+            // Get the file path
+            FilePath = file.Path.AbsolutePath;
         }
         catch (Exception ex)
         {

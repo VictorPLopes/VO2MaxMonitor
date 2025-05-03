@@ -29,12 +29,12 @@ public class MainWindowViewModel : ViewModelBase
         {
             CurrentView = new NewMeasurementViewModel(
                                                       this,
-                                                      _services.GetRequiredService<IVO2MaxCalculator>(),
-                                                      _services.GetRequiredService<IFilesService>()
+                                                      _services.GetRequiredService<IVO2MaxCalculator>()
                                                      );
         });
 
-        CurrentView = new WelcomeViewModel();
+        AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
+        CurrentView           = new WelcomeViewModel();
     }
 
     /// <summary>
@@ -80,4 +80,8 @@ public class MainWindowViewModel : ViewModelBase
     ///     Gets the command for adding a new measurement.
     /// </summary>
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
+    
+    
+    private void ShowNewMeasurementView() =>
+        CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
 }
