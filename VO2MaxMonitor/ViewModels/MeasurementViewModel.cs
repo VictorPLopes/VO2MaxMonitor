@@ -25,7 +25,7 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
     /// <summary>
     ///     Gets the formatted VO2Max value.
     /// </summary>
-    public string FormattedVO2Max => $"{Model.VO2Max:F2} ml/min/kg";
+    public string FormattedVO2Max => $"{Model.VO2Max:F2} mL/min/kg";
 
     /// <summary>
     ///     Gets the exercise type.

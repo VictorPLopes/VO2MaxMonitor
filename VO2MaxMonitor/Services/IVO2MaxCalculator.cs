@@ -17,7 +17,7 @@ public interface IVO2MaxCalculator
     /// </summary>
     /// <param name="readings">Collection of sensor readings. Must contain at least one reading.</param>
     /// <param name="weightKg">Body mass of the subject in kilograms (must be positive).</param>
-    /// <returns>The maximum V̇O₂ value computed over the dataset (ml/min/kg).</returns>
+    /// <returns>The maximum V̇O₂ value computed over the dataset (mL/min/kg).</returns>
     /// <exception cref="ArgumentException">
     ///     Thrown when:
     ///     <list type="bullet">
