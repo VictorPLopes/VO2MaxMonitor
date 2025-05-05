@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:vm="clr-namespace:VO2MaxMonitor.ViewModels"
              mc:Ignorable="d"
              x:Class="VO2MaxMonitor.Views.MeasurementDetailView"
@@ -10,14 +11,29 @@
             CornerRadius="8"
             Padding="24"
             Margin="16"
-            HorizontalAlignment="Stretch"
+            HorizontalAlignment="Center"
             VerticalAlignment="Center">
         <StackPanel Spacing="16" HorizontalAlignment="Center">
-            <!-- Exercise Type -->
-            <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Grid HorizontalAlignment="Stretch">
+                <!-- Exercise Type -->
+                <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           HorizontalAlignment="Left" />
+
+                <!-- Delete button -->
+                <Button
+                    Command="{Binding DeleteCommand}"
+                    Background="{DynamicResource ControlFillColorTransparentBrush}"
+                    BorderBrush="{DynamicResource ControlFillColorTransparentBrush}"
+                    HorizontalAlignment="Right"
+                    FontSize="18"
+                    Padding="8"
+                    CornerRadius="8">
+                    <ui:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                </Button>
+            </Grid>
 
             <!-- V̇O₂ max Value -->
             <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}"
@@ -45,15 +61,6 @@
                                FontSize="14" />
                 </StackPanel>
             </StackPanel>
-
-            <!-- Delete button -->
-            <Button Content="Delete"
-                    Command="{Binding DeleteCommand}"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource DangerFillColorBrush}"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Padding="8,4"
-                    CornerRadius="4" />
         </StackPanel>
     </Border>
 </UserControl>

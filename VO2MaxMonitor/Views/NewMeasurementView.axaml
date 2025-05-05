@@ -10,7 +10,7 @@
             CornerRadius="8"
             Padding="24"
             Margin="16"
-            HorizontalAlignment="Stretch"
+            HorizontalAlignment="Center"
             VerticalAlignment="Center">
         <StackPanel Spacing="16" Width="400">
             <TextBlock Text="New Measurement"
