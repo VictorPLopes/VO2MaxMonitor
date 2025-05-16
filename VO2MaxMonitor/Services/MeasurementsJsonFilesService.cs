@@ -15,24 +15,15 @@ namespace VO2MaxMonitor.Services;
 /// </remarks>
 public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
 {
-    // TODO: Implement different files for different users.
-    // For now, we will use a single file (and a single user) with a fixed name.
-    private readonly string _jsonFilePath = Path.Combine(
-                                                         Environment.GetFolderPath(Environment.SpecialFolder
-                                                                  .ApplicationData),
-                                                         "VO2MaxMonitor",
-                                                         "measurements.json"
-                                                        );
-
     /// <inheritdoc />
-    public async Task SaveToFileAsync(IEnumerable<Measurement> itemsToSave)
+    public async Task SaveToFileAsync(IEnumerable<Measurement> itemsToSave, Guid id)
     {
         ArgumentNullException.ThrowIfNull(itemsToSave);
 
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(_jsonFilePath)!);
-            await using var fs = File.Create(_jsonFilePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(GetPath(id))!);
+            await using var fs = File.Create(GetPath(id));
             await JsonSerializer.SerializeAsync(fs, itemsToSave);
         }
         catch (Exception ex)
@@ -42,11 +33,11 @@ public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Measurement>?> LoadFromFileAsync()
+    public async Task<IEnumerable<Measurement>?> LoadFromFileAsync(Guid id)
     {
         try
         {
-            await using var fs = File.OpenRead(_jsonFilePath);
+            await using var fs = File.OpenRead(GetPath(id));
             return await JsonSerializer.DeserializeAsync<IEnumerable<Measurement>>(fs);
         }
         catch (FileNotFoundException)
@@ -62,4 +53,13 @@ public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
             throw new IOException("Failed to load measurements from file", ex);
         }
     }
+
+    /// <summary>
+    ///     Generates the file path for the measurements JSON file based on the provided ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private static string GetPath(Guid id) =>
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VO2MaxMonitor", "profiles",
+                     $"{id}.json");
 }

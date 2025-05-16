@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using VO2MaxMonitor.Services;
@@ -15,6 +16,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IServiceProvider      _services;
     private          ViewModelBase         _currentView;
     private          MeasurementViewModel? _selectedMeasurement;
+    private          ProfileViewModel?     _selectedProfile;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -23,6 +25,9 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IServiceProvider services)
     {
         _services = services ?? throw new ArgumentNullException(nameof(services));
+
+        // Interaction with the profile dialog
+        ShowDialog = new Interaction<ProfileDialogViewModel, ProfileViewModel?>();
 
         // Initialize commands
         AddMeasurementCommand = ReactiveCommand.Create(() =>
@@ -35,12 +40,13 @@ public class MainWindowViewModel : ViewModelBase
 
         AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
         CurrentView           = new WelcomeViewModel();
-    }
 
-    /// <summary>
-    ///     Gets the collection of measurements.
-    /// </summary>
-    public ObservableCollection<MeasurementViewModel> Measurements { get; } = [];
+        // Profile commands
+        ShowProfileFlyoutCommand = ReactiveCommand.Create(ShowProfileFlyout);
+        SwitchProfileCommand     = ReactiveCommand.Create<ProfileViewModel>(SwitchProfile);
+        EditProfileCommand       = ReactiveCommand.Create<ProfileViewModel>(EditProfile);
+        AddProfileCommand        = ReactiveCommand.Create(AddProfile);
+    }
 
     /// <summary>
     ///     Gets or sets the currently displayed view.
@@ -81,7 +87,87 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
 
+    /// <summary>
+    ///     Command to show the profile selection flyout
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> ShowProfileFlyoutCommand { get; }
+
+    /// <summary>
+    ///     Command to switch to a different profile
+    /// </summary>
+    public ReactiveCommand<ProfileViewModel, Unit> SwitchProfileCommand { get; }
+
+    /// <summary>
+    ///     Command to edit an existing profile
+    /// </summary>
+    public ReactiveCommand<ProfileViewModel, Unit> EditProfileCommand { get; }
+
+    /// <summary>
+    ///     Command to add a new profile
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> AddProfileCommand { get; }
+
+    /// <summary>
+    ///     Interaction for showing the profile dialog
+    /// </summary>
+    public Interaction<ProfileDialogViewModel, ProfileViewModel?> ShowDialog { get; }
+
+    /// <summary>
+    ///     Gets the collection of user profiles
+    /// </summary>
+    public ObservableCollection<ProfileViewModel> Profiles { get; } = [];
+
+    /// <summary>
+    ///     Gets or sets the currently selected profile.
+    /// </summary>
+    public ProfileViewModel? SelectedProfile
+    {
+        get => _selectedProfile;
+        set
+        {
+            if (_selectedProfile != null)
+                _selectedProfile.IsSelected = false;
+
+            this.RaiseAndSetIfChanged(ref _selectedProfile, value);
+
+            SelectedMeasurement = null;
+
+            if (value == null) return;
+            value.IsSelected = true;
+        }
+    }
 
     private void ShowNewMeasurementView() =>
         CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
+
+    // This is handled automatically by the Flyout in XAML
+    private static void ShowProfileFlyout()
+    {
+    }
+
+    private void SwitchProfile(ProfileViewModel profile) => SelectedProfile = profile;
+
+    private async void EditProfile(ProfileViewModel profile)
+    {
+        var dialog = new ProfileDialogViewModel
+        {
+            Name     = profile.Name,
+            WeightKg = profile.WeightKg
+        };
+
+        var result = await ShowDialog.Handle(dialog);
+        if (result == null) return;
+        profile.Name     = result.Name;
+        profile.WeightKg = result.WeightKg;
+    }
+
+    private async void AddProfile()
+    {
+        var dialog = new ProfileDialogViewModel();
+        var result = await ShowDialog.Handle(dialog);
+        if (result == null) return;
+
+        Profiles.Add(result);
+        SelectedProfile = result;
+    }
 }

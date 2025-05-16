@@ -13,24 +13,46 @@ namespace VO2MaxMonitor.ViewModels;
 public class ProfileViewModel(Profile model) : ViewModelBase
 {
     private bool _isSelected;
-    
-    private Profile Model { get; } = model ?? throw new ArgumentNullException(nameof(model));
-    
+
     /// <summary>
-    ///     Gets the profile's name.
+    ///     Gets the underlying <see cref="Profile" /> model.
     /// </summary>
-    public string Name => Model.Name;
-    
+    public Profile Model { get; } = model ?? throw new ArgumentNullException(nameof(model));
+
     /// <summary>
-    ///     Gets the profile's weight in kilograms.
+    ///     Gets or sets the profile's name.
     /// </summary>
-    public double WeightKg => Model.WeightKg;
-    
+    public string Name
+    {
+        get => Model.Name;
+        set
+        {
+            var backingField = Model.Name;
+            this.RaiseAndSetIfChanged(ref backingField, value);
+            Model.Name = value;
+        }
+    }
+
+    /// <summary>
+    ///     Gets or sets the profile's weight in kilograms.
+    /// </summary>
+    public double WeightKg
+    {
+        get => Model.WeightKg;
+        set
+        {
+            var backingField = Model.WeightKg;
+            this.RaiseAndSetIfChanged(ref backingField, value);
+            Model.WeightKg = value;
+        }
+    }
+
     /// <summary>
     ///     Gets the collection of measurements associated with this profile.
     /// </summary>
-    public ObservableCollection<MeasurementViewModel> Measurements => new(model.Measurements.Select(m => new MeasurementViewModel(m)));
-    
+    public ObservableCollection<MeasurementViewModel> Measurements { get; } =
+        new(model.Measurements.Select(m => new MeasurementViewModel(m)));
+
     /// <summary>
     ///     Gets or sets whether this measurement is currently selected.
     /// </summary>
@@ -38,17 +60,17 @@ public class ProfileViewModel(Profile model) : ViewModelBase
     {
         set => this.RaiseAndSetIfChanged(ref _isSelected, value);
     }
-    
+
     /// <summary>
-    ///    Adds a new measurement to the profile.
+    ///     Adds a new measurement to the profile.
     /// </summary>
-    public void AddMeasurement(Measurement measurement)
+    public void AddMeasurement(MeasurementViewModel measurementVm)
     {
-        ArgumentNullException.ThrowIfNull(measurement);
-        Model.Measurements.Add(measurement);
-        Measurements.Add(new MeasurementViewModel(measurement));
+        ArgumentNullException.ThrowIfNull(measurementVm);
+        Model.Measurements.Add(measurementVm.Model);
+        Measurements.Add(measurementVm);
     }
-    
+
     /// <summary>
     ///     Removes a measurement from the profile.
     /// </summary>

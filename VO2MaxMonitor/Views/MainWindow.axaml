@@ -3,7 +3,9 @@
         xmlns:vm="using:VO2MaxMonitor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
         mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="600"
+        x:Name="Root"
         x:Class="VO2MaxMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -38,9 +40,10 @@
 
         <!-- Sidebar -->
         <Border DockPanel.Dock="Left" Width="260" Margin="0,0,8,0">
-            <DockPanel>
+            <Grid RowDefinitions="Auto,*,Auto">
+
                 <!-- Top section -->
-                <StackPanel DockPanel.Dock="Top" Spacing="16">
+                <StackPanel Grid.Row="0" Spacing="16">
                     <TextBlock Text="V̇O₂ Max Monitor"
                                Theme="{StaticResource TitleTextBlockStyle}" />
                     <Button Content="＋ New Measurement"
@@ -52,11 +55,10 @@
                 </StackPanel>
 
                 <!-- Measurement History -->
-                <ScrollViewer>
-                    <ListBox ItemsSource="{Binding Measurements}"
+                <ScrollViewer Grid.Row="1" Margin="0,16,0,0">
+                    <ListBox ItemsSource="{Binding SelectedProfile.Measurements}"
                              SelectedItem="{Binding SelectedMeasurement}"
-                             BorderThickness="0"
-                             Margin="0,16,0,0">
+                             BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Margin="0,4" Padding="12"
@@ -68,7 +70,88 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </ScrollViewer>
-            </DockPanel>
+
+                <!-- Profile Selector Area -->
+                <Border Grid.Row="2"
+                        Margin="0, 16, 0, 0"
+                        Padding="12"
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="0, 0, 8, 8"
+                        MaxHeight="65">
+                    <StackPanel>
+                        <!-- Current Profile Display -->
+                        <Button x:Name="ProfileButton"
+                                HorizontalAlignment="Stretch"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="4"
+                                Padding="8,4"
+                                Command="{Binding ShowProfileFlyoutCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding SelectedProfile.Name}"
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold" />
+                            </StackPanel>
+                            <!-- Profile Flyout -->
+                            <Button.Flyout>
+                                <Flyout Placement="TopEdgeAlignedRight"
+                                        ShowMode="Standard">
+                                    <StackPanel Width="240" Spacing="4">
+                                        <!-- Profile List -->
+                                        <ItemsControl ItemsSource="{Binding Profiles}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,4" ColumnDefinitions="*,Auto">
+                                                        <Button Grid.Column="0"
+                                                                HorizontalAlignment="Stretch"
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Command="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).SwitchProfileCommand}"
+                                                                CommandParameter="{Binding}">
+                                                            <TextBlock Text="{Binding Name}"
+                                                                       VerticalAlignment="Center"
+                                                                       Padding="8,4" />
+                                                        </Button>
+
+                                                        <Button Grid.Column="1"
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Command="{Binding $parent[ItemsControl].((vm:MainWindowViewModel)DataContext).EditProfileCommand}"
+                                                                CommandParameter="{Binding}">
+                                                            <ui:SymbolIcon Symbol="Edit" />
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Separator -->
+                                        <Border Height="1"
+                                                Background="{DynamicResource DividerStrokeColorDefaultBrush}"
+                                                Margin="0,8" />
+
+                                        <!-- Add Profile Button -->
+                                        <Button Content="Add profile"
+                                                Command="{Binding AddProfileCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Left"
+                                                Padding="8,4">
+                                            <Button.ContentTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                                        <ui:SymbolIcon Symbol="Add" />
+                                                        <TextBlock Text="Add profile" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </Button.ContentTemplate>
+                                        </Button>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Border>
 
         <!-- Main Content Area -->

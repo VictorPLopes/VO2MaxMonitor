@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VO2MaxMonitor.Models;
 
@@ -14,9 +15,9 @@ public class Profile(string name, double weightKg)
     private string _name { get; set; } = name?.Trim() ?? string.Empty;
 
     /// <summary>
-    ///     Gets the unique identifier for the profile.
+    ///     Gets or sets the unique identifier for the profile.
     /// </summary>
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     ///     Gets or sets the name of the profile.
@@ -30,15 +31,16 @@ public class Profile(string name, double weightKg)
     /// <summary>
     ///     Gets or sets the body mass of the subject in kilograms.
     /// </summary>
-    public double WeightKg { get; set; } = 0.0;
+    public double WeightKg { get; set; } = weightKg;
 
     /// <summary>
     ///     Gets or sets the list of measurements associated with this profile.
     /// </summary>
+    [JsonIgnore]
     public List<Measurement> Measurements { get; set; } = [];
 
     /// <summary>
-    ///     Gets the date and time when the profile was created.
+    ///     Gets or sets the date and time when the profile was created.
     /// </summary>
-    public DateTime CreatedAt { get; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

@@ -6,6 +6,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using VO2MaxMonitor.Models;
 using VO2MaxMonitor.Services;
 using VO2MaxMonitor.ViewModels;
 using VO2MaxMonitor.Views;
@@ -39,6 +40,8 @@ public class App : Application
 
         // Register services and view models that do not depend on MainWindow
         services.AddSingleton<IMeasurementsJsonFilesService, MeasurementsJsonFilesService>();
+        services.AddSingleton<IProfilesJsonFilesService, ProfilesJsonFilesService>();
+        services.AddSingleton<ISettingsJsonFilesService, SettingsJsonFilesService>();
         services.AddSingleton<IVO2MaxCalculator, VO2MaxCalculator>();
         services.AddSingleton<MainWindowViewModel>();
 
@@ -74,26 +77,80 @@ public class App : Application
     // Load data from disc
     private async Task InitMainViewModelAsync(MainWindowViewModel vm)
     {
-        var fileService = Services!.GetRequiredService<IMeasurementsJsonFilesService>();
-        // get the items to load
-        var itemsLoaded = await fileService.LoadFromFileAsync();
+        // Load settings
+        var settingsFileService = Services!.GetRequiredService<ISettingsJsonFilesService>();
+        var settings            = await settingsFileService.LoadFromFileAsync();
 
-        if (itemsLoaded is not null)
-            foreach (var item in itemsLoaded)
-                vm.Measurements.Add(new MeasurementViewModel(item));
+        // Load profiles
+        var profilesFileService = Services!.GetRequiredService<IProfilesJsonFilesService>();
+        // Get the items to load
+        var profilesLoaded = await profilesFileService.LoadFromFileAsync();
+        var profiles       = profilesLoaded?.ToList();
+
+        // If there are no profiles, create a default one
+        if (profiles is null || profiles.Count == 0)
+        {
+            profiles = [new Profile("Default", 70.0)];
+            // Set the new profile as the selected one
+            vm.SelectedProfile = new ProfileViewModel(profiles[0]);
+            // Add the new profile to the ViewModel
+            vm.Profiles.Add(vm.SelectedProfile);
+        }
+        else // If there are profiles
+        {
+            // Add the profiles to the ViewModel, load its measurements and set the selected one
+            foreach (var profile in profiles)
+            {
+                var profileVm = new ProfileViewModel(profile);
+
+                // Load the measurements for this profile
+                var measurementsFileService = Services!.GetRequiredService<IMeasurementsJsonFilesService>();
+                var measurementsLoaded      = await measurementsFileService.LoadFromFileAsync(profileVm.Model.Id);
+
+                // Add the measurements to the ViewModel
+                if (measurementsLoaded is null) continue;
+                foreach (var measurement in measurementsLoaded)
+                    profileVm.AddMeasurement(new MeasurementViewModel(measurement));
+
+                // Add the profile to the ViewModel
+                vm.Profiles.Add(profileVm);
+                // If the profile is the last one used, set it as selected
+                if (profile.Id == settings?.LastProfileId)
+                    vm.SelectedProfile = profileVm;
+            }
+
+            // If no profile was selected, select the first one
+            vm.SelectedProfile ??= vm.Profiles[0];
+        }
     }
 
-    // We want to save our measurements before we actually shutdown the App. As File I/O is async, we need to wait until file is closed
+    // We want to save our data before we actually shutdown the App. As File I/O is async, we need to wait until file is closed
     // before we can actually close this window
     private async void DesktopOnShutdownRequested(object? sender, ShutdownRequestedEventArgs e, MainWindowViewModel vm)
     {
         e.Cancel = !_canClose; // cancel closing event first time
-
         if (_canClose) return;
-        // To save the items, we map them to the ToDoItem-Model which is better suited for I/O operations
-        var fileService = Services!.GetRequiredService<IMeasurementsJsonFilesService>();
-        var itemsToSave = vm.Measurements.Select(item => item.Model);
+
+        // Save settings
+        var settingsFileService = Services!.GetRequiredService<ISettingsJsonFilesService>();
+        var settings = new Settings
+        {
+            LastProfileId = vm.SelectedProfile?.Model.Id ?? Guid.Empty
+        };
+        await settingsFileService.SaveToFileAsync(settings);
+
+        // To save the items, we map them to the Profile model which is better suited for I/O operations
+        var fileService = Services!.GetRequiredService<IProfilesJsonFilesService>();
+        var itemsToSave = vm.Profiles.Select(item => item.Model);
         await fileService.SaveToFileAsync(itemsToSave);
+
+        // Save measurements for each profile
+        foreach (var profile in vm.Profiles)
+        {
+            var measurementsFileService = Services!.GetRequiredService<IMeasurementsJsonFilesService>();
+            var measurementsToSave      = profile.Measurements.Select(item => item.Model);
+            await measurementsFileService.SaveToFileAsync(measurementsToSave, profile.Model.Id);
+        }
 
         // Set _canClose to true and Close this Window again
         _canClose = true;

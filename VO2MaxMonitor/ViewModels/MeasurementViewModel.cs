@@ -13,7 +13,7 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
     private bool _isSelected;
 
     /// <summary>
-    ///     Gets the underlying measurement model.
+    ///     Gets the underlying <see cref="Measurement" /> model.
     /// </summary>
     public Measurement Model { get; } = model ?? throw new ArgumentNullException(nameof(model));
 

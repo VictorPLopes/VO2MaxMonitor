@@ -1,0 +1,23 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:VO2MaxMonitor.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VO2MaxMonitor.Views.ProfileDialog"
+        x:DataType="vm:ProfileDialogViewModel"
+        Title="Edit Profile"
+        Width="400"
+        MinHeight="200"
+        SizeToContent="Height">
+    <StackPanel Spacing="16" Margin="16">
+        <TextBox Watermark="Profile name"
+                 Text="{Binding Name, Mode=TwoWay}" />
+        <TextBox Watermark="Weight (kg)"
+                 Text="{Binding WeightKg, Mode=TwoWay}" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Cancel" Command="{Binding CancelCommand}" MinWidth="80" />
+            <Button Content="Save" Command="{Binding SaveCommand}" MinWidth="80" />
+        </StackPanel>
+    </StackPanel>
+</Window>

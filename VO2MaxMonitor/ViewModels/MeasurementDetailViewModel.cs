@@ -36,7 +36,7 @@ public class MeasurementDetailViewModel : ViewModelBase
 
     private void DeleteMeasurement()
     {
-        _mainVm.Measurements.Remove(MeasurementVm);
+        _mainVm.SelectedProfile?.RemoveMeasurement(MeasurementVm);
         _mainVm.SelectedMeasurement = null;
     }
 }

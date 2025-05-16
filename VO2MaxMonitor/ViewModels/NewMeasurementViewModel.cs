@@ -22,11 +22,9 @@ public class NewMeasurementViewModel : ViewModelBase
     private readonly MainWindowViewModel _mainVm;
     private readonly IVO2MaxCalculator   _vo2Calculator;
     private          string              _exerciseType = "Treadmill";
+    private          string              _filePath     = string.Empty;
+    private          double              _weightKg;
 
-    private string _filePath = string.Empty;
-
-    //private double _weightKg = mainVm.CurrentProfile?.WeightKg ?? 70.0; // TODO: Default to profile weight or 70kg
-    private double _weightKg = 70.0;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="NewMeasurementViewModel" /> class.
@@ -35,8 +33,9 @@ public class NewMeasurementViewModel : ViewModelBase
         MainWindowViewModel mainVm,
         IVO2MaxCalculator   vo2Calculator)
     {
-        _mainVm        = mainVm        ?? throw new ArgumentNullException(nameof(mainVm));
-        _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
+        _mainVm        = mainVm                           ?? throw new ArgumentNullException(nameof(mainVm));
+        _weightKg      = mainVm.SelectedProfile?.WeightKg ?? 70.0;
+        _vo2Calculator = vo2Calculator                    ?? throw new ArgumentNullException(nameof(vo2Calculator));
 
         var canCompute = this.WhenAnyValue(
                                            x => x.WeightKg,
@@ -66,10 +65,12 @@ public class NewMeasurementViewModel : ViewModelBase
     public double WeightKg
     {
         get => _weightKg;
-        set => this.RaiseAndSetIfChanged(ref _weightKg, value);
-        // TODO: Update profile weight if changed
-        // if (_mainVm.CurrentProfile != null)
-        //    _mainVm.CurrentProfile.WeightKg = value;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _weightKg, value);
+            if (_mainVm.SelectedProfile == null) return;
+            _mainVm.SelectedProfile.WeightKg = value;
+        }
     }
 
     /// <summary>
@@ -128,7 +129,7 @@ public class NewMeasurementViewModel : ViewModelBase
             var measurement   = new Measurement(vo2Max, _weightKg, _exerciseType);
             var measurementVm = new MeasurementViewModel(measurement);
 
-            _mainVm.Measurements.Add(measurementVm);
+            _mainVm.SelectedProfile?.AddMeasurement(measurementVm);
             _mainVm.SelectedMeasurement = measurementVm;
         }
         catch (Exception ex)
