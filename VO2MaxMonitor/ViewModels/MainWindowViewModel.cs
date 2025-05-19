@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Avalonia.Controls.Primitives;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using VO2MaxMonitor.Services;
@@ -15,6 +18,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     private readonly IServiceProvider      _services;
     private          ViewModelBase         _currentView;
+    private          FlyoutBase?           _profileFlyout;
     private          MeasurementViewModel? _selectedMeasurement;
     private          ProfileViewModel?     _selectedProfile;
 
@@ -29,6 +33,9 @@ public class MainWindowViewModel : ViewModelBase
         // Interaction with the profile dialog
         ShowDialog = new Interaction<ProfileDialogViewModel, ProfileViewModel?>();
 
+        // Interaction with the delete confirmation dialog
+        ShowConfirmDialog = new Interaction<ConfirmDialogViewModel, bool>();
+
         // Initialize commands
         AddMeasurementCommand = ReactiveCommand.Create(() =>
         {
@@ -42,10 +49,12 @@ public class MainWindowViewModel : ViewModelBase
         CurrentView           = new WelcomeViewModel();
 
         // Profile commands
-        ShowProfileFlyoutCommand = ReactiveCommand.Create(ShowProfileFlyout);
-        SwitchProfileCommand     = ReactiveCommand.Create<ProfileViewModel>(SwitchProfile);
-        EditProfileCommand       = ReactiveCommand.Create<ProfileViewModel>(EditProfile);
-        AddProfileCommand        = ReactiveCommand.Create(AddProfile);
+        ShowProfileFlyoutCommand  = ReactiveCommand.Create(ShowProfileFlyout);
+        SwitchProfileCommand      = ReactiveCommand.Create<ProfileViewModel>(SwitchProfile);
+        EditCurrentProfileCommand = ReactiveCommand.Create(EditCurrentProfile);
+        EditProfileCommand        = ReactiveCommand.CreateFromTask<ProfileViewModel>(EditProfile);
+        DeleteProfileCommand      = ReactiveCommand.CreateFromTask<ProfileViewModel>(DeleteProfile);
+        AddProfileCommand         = ReactiveCommand.Create(AddProfile);
     }
 
     /// <summary>
@@ -103,6 +112,16 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<ProfileViewModel, Unit> EditProfileCommand { get; }
 
     /// <summary>
+    ///     Command to edit the current profile
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> EditCurrentProfileCommand { get; }
+
+    /// <summary>
+    ///     Command to delete a profile
+    /// </summary>
+    public ReactiveCommand<ProfileViewModel, Unit> DeleteProfileCommand { get; }
+
+    /// <summary>
     ///     Command to add a new profile
     /// </summary>
     public ReactiveCommand<Unit, Unit> AddProfileCommand { get; }
@@ -113,9 +132,20 @@ public class MainWindowViewModel : ViewModelBase
     public Interaction<ProfileDialogViewModel, ProfileViewModel?> ShowDialog { get; }
 
     /// <summary>
+    ///     Interaction for confirmation dialogs
+    /// </summary>
+    public Interaction<ConfirmDialogViewModel, bool> ShowConfirmDialog { get; }
+
+    /// <summary>
     ///     Gets the collection of user profiles
     /// </summary>
     public ObservableCollection<ProfileViewModel> Profiles { get; } = [];
+
+    /// <summary>
+    ///     Gets the profiles excluding the currently selected one
+    /// </summary>
+    public ObservableCollection<ProfileViewModel> OtherProfiles =>
+        new(Profiles.Where(p => p != SelectedProfile));
 
     /// <summary>
     ///     Gets or sets the currently selected profile.
@@ -137,6 +167,11 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    ///     Set the flyout reference (call this from view)
+    /// </summary>
+    public void SetFlyout(FlyoutBase flyout) => _profileFlyout = flyout;
+
     private void ShowNewMeasurementView() =>
         CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
 
@@ -145,9 +180,13 @@ public class MainWindowViewModel : ViewModelBase
     {
     }
 
-    private void SwitchProfile(ProfileViewModel profile) => SelectedProfile = profile;
+    private void SwitchProfile(ProfileViewModel profile)
+    {
+        SelectedProfile = profile;
+        CloseFlyout();
+    }
 
-    private async void EditProfile(ProfileViewModel profile)
+    private async Task EditProfile(ProfileViewModel profile)
     {
         var dialog = new ProfileDialogViewModel
         {
@@ -157,8 +196,15 @@ public class MainWindowViewModel : ViewModelBase
 
         var result = await ShowDialog.Handle(dialog);
         if (result == null) return;
+
         profile.Name     = result.Name;
         profile.WeightKg = result.WeightKg;
+    }
+
+    private async void EditCurrentProfile()
+    {
+        if (SelectedProfile == null) return;
+        await EditProfile(SelectedProfile);
     }
 
     private async void AddProfile()
@@ -169,5 +215,23 @@ public class MainWindowViewModel : ViewModelBase
 
         Profiles.Add(result);
         SelectedProfile = result;
+        CloseFlyout();
     }
+
+    private async Task DeleteProfile(ProfileViewModel profile)
+    {
+        var confirm = new ConfirmDialogViewModel
+        {
+            Title   = "Delete Profile",
+            Message = $"Are you sure you want to delete profile '{profile.Name}'?"
+        };
+
+        var shouldDelete = await ShowConfirmDialog.Handle(confirm);
+        if (!shouldDelete) return;
+
+        Profiles.Remove(profile);
+        CloseFlyout();
+    }
+
+    private void CloseFlyout() => _profileFlyout?.Hide();
 }
