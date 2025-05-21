@@ -205,6 +205,9 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (SelectedProfile == null) return;
         await EditProfile(SelectedProfile);
+        
+        // Force UI refresh
+        this.RaisePropertyChanged(nameof(SelectedProfile));
     }
 
     private async void AddProfile()

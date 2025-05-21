@@ -88,7 +88,7 @@
                                     BorderThickness="0"
                                     CornerRadius="4"
                                     Padding="8,4"
-                                    Command="{Binding ShowProfileFlyoutCommand}">
+                                    Command="{Binding ShowProfileFlyoutCommand, Mode=OneWay}">
                                 <TextBlock Text="{Binding SelectedProfile.Name}"
                                            VerticalAlignment="Center"
                                            FontWeight="SemiBold" />
