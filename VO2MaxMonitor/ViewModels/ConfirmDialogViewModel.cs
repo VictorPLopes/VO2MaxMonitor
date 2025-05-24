@@ -11,8 +11,8 @@ public class ConfirmDialogViewModel : ViewModelBase
     /// <summary>
     ///     Gets or sets the title of the dialog.
     /// </summary>
-    public string Title   { get; set; } = "Confirm";
-    
+    public string Title { get; set; } = "Confirm";
+
     /// <summary>
     ///     Gets or sets the message to display in the dialog.
     /// </summary>
@@ -22,9 +22,9 @@ public class ConfirmDialogViewModel : ViewModelBase
     ///     Command to confirm the action.
     /// </summary>
     public ReactiveCommand<Unit, bool> ConfirmCommand { get; } = ReactiveCommand.Create(() => true);
-    
+
     /// <summary>
     ///     Command to cancel the action.
     /// </summary>
-    public ReactiveCommand<Unit, bool> CancelCommand  { get; } = ReactiveCommand.Create(() => false);
+    public ReactiveCommand<Unit, bool> CancelCommand { get; } = ReactiveCommand.Create(() => false);
 }

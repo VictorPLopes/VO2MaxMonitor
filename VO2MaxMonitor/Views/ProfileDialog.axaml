@@ -9,7 +9,8 @@
         Title="Edit Profile"
         Width="400"
         MinHeight="200"
-        SizeToContent="Height">
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner">
     <StackPanel Spacing="16" Margin="16">
         <TextBox Watermark="Profile name"
                  Text="{Binding Name, Mode=TwoWay}" />
