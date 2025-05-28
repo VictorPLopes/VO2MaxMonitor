@@ -12,7 +12,9 @@ namespace VO2MaxMonitor.ViewModels;
 /// <param name="model">The profile model to wrap.</param>
 public class ProfileViewModel(Profile model) : ViewModelBase
 {
-    private bool _isSelected;
+    private bool   _isSelected;
+    private string _name     = model.Name;
+    private double _weightKg = model.WeightKg;
 
     /// <summary>
     ///     Gets the underlying <see cref="Profile" /> model.
@@ -24,11 +26,10 @@ public class ProfileViewModel(Profile model) : ViewModelBase
     /// </summary>
     public string Name
     {
-        get => Model.Name;
+        get => _name;
         set
         {
-            var backingField = Model.Name;
-            this.RaiseAndSetIfChanged(ref backingField, value);
+            this.RaiseAndSetIfChanged(ref _name, value);
             Model.Name = value;
         }
     }
@@ -38,11 +39,10 @@ public class ProfileViewModel(Profile model) : ViewModelBase
     /// </summary>
     public double WeightKg
     {
-        get => Model.WeightKg;
+        get => _weightKg;
         set
         {
-            var backingField = Model.WeightKg;
-            this.RaiseAndSetIfChanged(ref backingField, value);
+            this.RaiseAndSetIfChanged(ref _weightKg, value);
             Model.WeightKg = value;
         }
     }
