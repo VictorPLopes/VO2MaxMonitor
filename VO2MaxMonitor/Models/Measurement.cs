@@ -11,9 +11,9 @@ namespace VO2MaxMonitor.Models;
 public class Measurement(double vO2Max, double weightKg, string exerciseType)
 {
     /// <summary>
-    ///     Gets the date and time when the V̇O₂ value was computed.
+    ///     Gets or sets the date and time when the V̇O₂ value was computed.
     /// </summary>
-    public DateTime ExerciseDate { get; } = DateTime.Now;
+    public DateTime ExerciseDate { get; set; } = DateTime.Now;
 
     /// <summary>
     ///     Gets the maximum V̇O₂ value (mL/min/kg) computed over the measurement interval.

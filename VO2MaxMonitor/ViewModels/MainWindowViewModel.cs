@@ -44,8 +44,14 @@ public class MainWindowViewModel : ViewModelBase
                                                       _services.GetRequiredService<IVO2MaxCalculator>()
                                                      );
         });
-
         AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
+        
+        ShowProgressCommand = ReactiveCommand.Create(() =>
+        {
+            CurrentView = new ProgressViewModel(SelectedProfile);
+        });
+        ShowProgressCommand = ReactiveCommand.Create(ShowProgressView);
+        
         CurrentView           = new WelcomeViewModel();
 
         // Profile commands
@@ -95,6 +101,11 @@ public class MainWindowViewModel : ViewModelBase
     ///     Gets the command for adding a new measurement.
     /// </summary>
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
+    
+    /// <summary>
+    ///     Gets the command for showing the performance view.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> ShowProgressCommand { get; }
 
     /// <summary>
     ///     Command to show the profile selection flyout
@@ -174,6 +185,8 @@ public class MainWindowViewModel : ViewModelBase
 
     private void ShowNewMeasurementView() =>
         CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
+    
+    private void ShowProgressView() => CurrentView = new ProgressViewModel(SelectedProfile);
 
     // This is handled automatically by the Flyout in XAML
     private static void ShowProfileFlyout()
