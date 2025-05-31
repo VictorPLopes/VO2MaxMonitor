@@ -27,7 +27,7 @@
     </Design.DataContext>
 
     <!-- App Layout -->
-    <DockPanel Margin="24">
+    <DockPanel Margin="24, 48, 24, 24">
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
