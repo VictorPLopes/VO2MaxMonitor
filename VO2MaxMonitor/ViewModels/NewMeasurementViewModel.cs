@@ -107,7 +107,6 @@ public class NewMeasurementViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            // TODO: Implement proper error handling
             Console.WriteLine($"Error selecting file: {ex.Message}");
         }
     }
@@ -134,7 +133,6 @@ public class NewMeasurementViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            // TODO: Implement proper error handling
             Console.WriteLine($"Error computing VO2Max: {ex.Message}");
         }
     }

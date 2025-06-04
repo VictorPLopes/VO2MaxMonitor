@@ -61,10 +61,10 @@
                     FontWeight="SemiBold" />
             
             <!-- Stopwatch -->
-            <TextBlock Text="{Binding StopwatchDisplay}"
+            <!--<TextBlock Text="{Binding StopwatchDisplay}"
                        FontSize="14"
                        HorizontalAlignment="Center"
-                       Margin="0,16,0,0" />
+                       Margin="0,16,0,0" />-->
         </StackPanel>
     </Border>
 </UserControl>
