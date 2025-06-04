@@ -12,5 +12,59 @@
             Margin="16"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
+        <StackPanel Spacing="16" Width="400">
+            <TextBlock Text="Download Data (MQTT)"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8" />
+
+            <!-- Broker Address -->
+            <TextBox Watermark="Broker Address"
+                     Text="{Binding Broker}" />
+
+            <!-- Port -->
+            <TextBox Watermark="Port"
+                     Text="{Binding Port}" />
+            
+            <!-- Topic -->
+            <TextBox Watermark="Topic"
+                     Text="{Binding Topic}" />
+            
+            <!-- Username -->
+            <TextBox Watermark="Username"
+                     Text="{Binding Username}" />
+            
+            <!-- Password -->
+            <TextBox PasswordChar="*" Watermark="Password"
+                          Text="{Binding Password}" />
+
+            <!-- Save File -->
+            <Button Content="Select CSV File Destination"
+                    Command="{Binding SaveCsvCommand}"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="4" />
+
+            <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    CornerRadius="4"
+                    Padding="8">
+                <TextBlock Text="{Binding FilePath}"
+                           TextWrapping="Wrap"
+                           FontSize="12" />
+            </Border>
+
+            <!-- Start / Stop Button -->
+            <Button Content="{Binding StartStopButtonText}"
+                    Command="{Binding StartStopCommand}"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,16,0,0"
+                    CornerRadius="4"
+                    FontWeight="SemiBold" />
+            
+            <!-- Stopwatch -->
+            <TextBlock Text="{Binding StopwatchDisplay}"
+                       FontSize="14"
+                       HorizontalAlignment="Center"
+                       Margin="0,16,0,0" />
+        </StackPanel>
     </Border>
 </UserControl>
