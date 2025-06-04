@@ -15,4 +15,12 @@ public interface IFilesService
     ///     The selected file or null if no file was selected.
     /// </returns>
     Task<IStorageFile?> OpenFileAsync();
+    
+    /// <summary>
+    ///     Opens a save file dialog to save a file.
+    /// </summary>
+    /// <returns>
+    ///     The selected file or null if no file was selected.
+    /// </returns>
+    Task<IStorageFile?> SaveFileAsync();
 }

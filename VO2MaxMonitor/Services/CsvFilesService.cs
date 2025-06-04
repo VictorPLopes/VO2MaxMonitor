@@ -29,4 +29,16 @@ public class CsvFilesService(Window target) : IFilesService
 
         return files.Count >= 1 ? files[0] : null;
     }
+
+    /// <inheritdoc />
+    public async Task<IStorageFile?> SaveFileAsync() => 
+        await _target.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions() 
+        {
+            Title = "Save CSV File",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("CSV files") { Patterns = ["*.csv"] },
+                new FilePickerFileType("All files") { Patterns = ["*"] }
+            ]
+        });
 }
