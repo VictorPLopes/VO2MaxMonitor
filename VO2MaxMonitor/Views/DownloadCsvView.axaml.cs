@@ -1,13 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 
 namespace VO2MaxMonitor.Views;
 
 public partial class DownloadCsvView : UserControl
 {
-    public DownloadCsvView()
-    {
-        InitializeComponent();
-    }
+    public DownloadCsvView() => InitializeComponent();
 }

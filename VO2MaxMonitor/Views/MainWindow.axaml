@@ -102,7 +102,7 @@
                                 <Border Margin="0,4" Padding="12"
                                         Background="{DynamicResource ThemeBackgroundBrush}"
                                         CornerRadius="8">
-                                    <TextBlock Text="{Binding FormattedDate}" FontSize="14"/>
+                                    <TextBlock Text="{Binding FormattedDate}" FontSize="14" />
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

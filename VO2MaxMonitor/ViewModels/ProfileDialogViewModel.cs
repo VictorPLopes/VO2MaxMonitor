@@ -19,7 +19,7 @@ public class ProfileDialogViewModel : ViewModelBase
     public ProfileDialogViewModel(ProfileViewModel? profile = null)
     {
         // Initialize properties from the profile or with defaults
-        _name     = profile?.Name     ?? string.Empty;
+        _name     = profile?.Name ?? string.Empty;
         _weightKg = profile?.WeightKg ?? 70.0;
 
         SaveCommand = ReactiveCommand.Create(() => new ProfileViewModel(new Profile(Name, WeightKg)));

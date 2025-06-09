@@ -60,6 +60,7 @@ public class MeasurementsJsonFilesService : IMeasurementsJsonFilesService
     /// <param name="id"></param>
     /// <returns></returns>
     private static string GetPath(Guid id) =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VO2MaxMonitor", "profiles",
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VO2MaxMonitor",
+                     "profiles",
                      $"{id}.json");
 }

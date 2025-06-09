@@ -45,18 +45,12 @@ public class MainWindowViewModel : ViewModelBase
                                                      );
         });
         AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
-        
-        ShowProgressCommand = ReactiveCommand.Create(() =>
-        {
-            CurrentView = new ProgressViewModel(SelectedProfile);
-        });
 
-        DownloadCsvCommand = ReactiveCommand.Create(() =>
-        {
-            CurrentView = new DownloadCsvViewModel();
-        });
-        
-        CurrentView           = new WelcomeViewModel();
+        ShowProgressCommand = ReactiveCommand.Create(() => { CurrentView = new ProgressViewModel(SelectedProfile); });
+
+        DownloadCsvCommand = ReactiveCommand.Create(() => { CurrentView = new DownloadCsvViewModel(); });
+
+        CurrentView = new WelcomeViewModel();
 
         // Profile commands
         ShowProfileFlyoutCommand  = ReactiveCommand.Create(ShowProfileFlyout);
@@ -105,12 +99,12 @@ public class MainWindowViewModel : ViewModelBase
     ///     Gets the command for adding a new measurement.
     /// </summary>
     public ReactiveCommand<Unit, Unit> AddMeasurementCommand { get; }
-    
+
     /// <summary>
     ///     Gets the command for showing the performance view.
     /// </summary>
     public ReactiveCommand<Unit, Unit> ShowProgressCommand { get; }
-    
+
     /// <summary>
     ///     Gets the command for downloading measurements as CSV from a remote MQTT broker.
     /// </summary>
@@ -194,7 +188,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void ShowNewMeasurementView() =>
         CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
-    
+
     // This is handled automatically by the Flyout in XAML
     private static void ShowProfileFlyout()
     {

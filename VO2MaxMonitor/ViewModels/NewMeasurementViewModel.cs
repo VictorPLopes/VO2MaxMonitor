@@ -33,16 +33,16 @@ public class NewMeasurementViewModel : ViewModelBase
         MainWindowViewModel mainVm,
         IVO2MaxCalculator   vo2Calculator)
     {
-        _mainVm        = mainVm                           ?? throw new ArgumentNullException(nameof(mainVm));
+        _mainVm        = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
         _weightKg      = mainVm.SelectedProfile?.WeightKg ?? 70.0;
-        _vo2Calculator = vo2Calculator                    ?? throw new ArgumentNullException(nameof(vo2Calculator));
+        _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
 
         var canCompute = this.WhenAnyValue(
                                            x => x.WeightKg,
                                            x => x.FilePath,
                                            x => x.ExerciseType,
                                            (weight, filePath, exerciseType) =>
-                                               !string.IsNullOrWhiteSpace(filePath)     &&
+                                               !string.IsNullOrWhiteSpace(filePath) &&
                                                !string.IsNullOrWhiteSpace(exerciseType) &&
                                                weight > 0);
 

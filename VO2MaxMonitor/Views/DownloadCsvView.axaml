@@ -25,18 +25,18 @@
             <!-- Port -->
             <TextBox Watermark="Port"
                      Text="{Binding Port}" />
-            
+
             <!-- Topic -->
             <TextBox Watermark="Topic"
                      Text="{Binding Topic}" />
-            
+
             <!-- Username -->
             <TextBox Watermark="Username"
                      Text="{Binding Username}" />
-            
+
             <!-- Password -->
             <TextBox PasswordChar="*" Watermark="Password"
-                          Text="{Binding Password}" />
+                     Text="{Binding Password}" />
 
             <!-- Save File -->
             <Button Content="Select CSV File Destination"
@@ -59,7 +59,7 @@
                     Margin="0,16,0,0"
                     CornerRadius="4"
                     FontWeight="SemiBold" />
-            
+
             <!-- Stopwatch -->
             <!--<TextBlock Text="{Binding StopwatchDisplay}"
                        FontSize="14"

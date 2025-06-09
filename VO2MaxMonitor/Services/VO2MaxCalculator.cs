@@ -95,8 +95,8 @@ public class VO2MaxCalculator(double airDensity, double airDryness, double ambie
     /// </returns>
     private double ComputeVO2(double volume, double o2, double weightKg)
     {
-        var co2 = ambientO2 - o2; // Estimate CO₂ as the difference from ambient O₂
-        var n2  = 100.0     - o2 - co2; // Remaining percentage assumed to be N₂
+        var co2 = ambientO2 - o2;   // Estimate CO₂ as the difference from ambient O₂
+        var n2  = 100.0 - o2 - co2; // Remaining percentage assumed to be N₂
 
         // Volume corrected for a minute (mL/min)
         var minuteVolume = volume * (60000.0 / vO2ComputationInterval) * airDryness;

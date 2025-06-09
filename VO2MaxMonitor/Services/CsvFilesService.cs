@@ -18,8 +18,8 @@ public class CsvFilesService(Window target) : IFilesService
     {
         var files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title          = "Open CSV File",
-            AllowMultiple  = false,
+            Title         = "Open CSV File",
+            AllowMultiple = false,
             FileTypeFilter =
             [
                 new FilePickerFileType("CSV files") { Patterns = ["*.csv"] },
@@ -31,8 +31,8 @@ public class CsvFilesService(Window target) : IFilesService
     }
 
     /// <inheritdoc />
-    public async Task<IStorageFile?> SaveFileAsync() => 
-        await _target.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions() 
+    public async Task<IStorageFile?> SaveFileAsync() =>
+        await _target.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Save CSV File",
             FileTypeChoices =

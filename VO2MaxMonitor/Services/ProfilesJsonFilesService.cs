@@ -17,7 +17,7 @@ public class ProfilesJsonFilesService : IProfilesJsonFilesService
 {
     private readonly string _jsonFilePath = Path.Combine(
                                                          Environment.GetFolderPath(Environment.SpecialFolder
-                                                                  .ApplicationData),
+                                                                      .ApplicationData),
                                                          "VO2MaxMonitor",
                                                          "profiles.json"
                                                         );
