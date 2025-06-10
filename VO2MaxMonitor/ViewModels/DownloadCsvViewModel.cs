@@ -38,7 +38,7 @@ public class DownloadCsvViewModel : ViewModelBase
     public DownloadCsvViewModel(string defaultUsername = "")
     {
         Username = defaultUsername;
-        
+
         var canDownload = this.WhenAnyValue(
                                             x => x.Broker,
                                             x => x.Port,
@@ -241,12 +241,8 @@ public class DownloadCsvViewModel : ViewModelBase
 
             // Save the readings to a CSV file
             await using (var writer = new StreamWriter(FilePath))
-            {
                 await using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                {
                     await csv.WriteRecordsAsync(_readings);
-                }
-            }
 
             _readings.Clear();
         }

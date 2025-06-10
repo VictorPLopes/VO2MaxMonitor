@@ -117,12 +117,8 @@ public class NewMeasurementViewModel : ViewModelBase
         {
             List<Reading> readings;
             using (var reader = new StreamReader(FilePath))
-            {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
                     readings = csv.GetRecords<Reading>().ToList();
-                }
-            }
 
             var vo2Max        = _vo2Calculator.Calculate(readings, _weightKg);
             var measurement   = new Measurement(vo2Max, _weightKg, _exerciseType);

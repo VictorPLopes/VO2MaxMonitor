@@ -48,7 +48,10 @@ public class MainWindowViewModel : ViewModelBase
 
         ShowProgressCommand = ReactiveCommand.Create(() => { CurrentView = new ProgressViewModel(SelectedProfile); });
 
-        DownloadCsvCommand = ReactiveCommand.Create(() => { CurrentView = new DownloadCsvViewModel(SelectedProfile!.Name); });
+        DownloadCsvCommand = ReactiveCommand.Create(() =>
+        {
+            CurrentView = new DownloadCsvViewModel(SelectedProfile!.Name);
+        });
 
         CurrentView = new WelcomeViewModel();
 
