@@ -35,8 +35,10 @@ public class DownloadCsvViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="DownloadCsvViewModel" /> class.
     /// </summary>
-    public DownloadCsvViewModel()
+    public DownloadCsvViewModel(string defaultUsername = "")
     {
+        Username = defaultUsername;
+        
         var canDownload = this.WhenAnyValue(
                                             x => x.Broker,
                                             x => x.Port,
