@@ -4,8 +4,10 @@
     <option name="projectPerEditor">
       <map>
         <entry key="VO2MaxMonitor/App.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
+        <entry key="VO2MaxMonitor/ViewModels/ProfileView.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
         <entry key="VO2MaxMonitor/Views/ConfirmDialog.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
         <entry key="VO2MaxMonitor/Views/DownloadCsvView.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
+        <entry key="VO2MaxMonitor/Views/EditProfileView.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
         <entry key="VO2MaxMonitor/Views/MainWindow.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
         <entry key="VO2MaxMonitor/Views/MeasurementDetailView.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />
         <entry key="VO2MaxMonitor/Views/NewMeasurementView.axaml" value="VO2MaxMonitor/VO2MaxMonitor.csproj" />

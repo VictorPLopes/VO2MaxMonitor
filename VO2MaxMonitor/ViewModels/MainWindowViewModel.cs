@@ -30,9 +30,6 @@ public class MainWindowViewModel : ViewModelBase
     {
         _services = services ?? throw new ArgumentNullException(nameof(services));
 
-        // Interaction with the profile dialog
-        ShowDialog = new Interaction<ProfileDialogViewModel, ProfileViewModel?>();
-
         // Interaction with the delete confirmation dialog
         ShowConfirmDialog = new Interaction<ConfirmDialogViewModel, bool>();
 
@@ -59,7 +56,7 @@ public class MainWindowViewModel : ViewModelBase
         ShowProfileFlyoutCommand  = ReactiveCommand.Create(ShowProfileFlyout);
         SwitchProfileCommand      = ReactiveCommand.Create<ProfileViewModel>(SwitchProfile);
         EditCurrentProfileCommand = ReactiveCommand.Create(EditCurrentProfile);
-        EditProfileCommand        = ReactiveCommand.CreateFromTask<ProfileViewModel>(EditProfile);
+        EditProfileCommand        = ReactiveCommand.Create<ProfileViewModel>(EditProfile);
         DeleteProfileCommand      = ReactiveCommand.CreateFromTask<ProfileViewModel>(DeleteProfile);
         AddProfileCommand         = ReactiveCommand.Create(AddProfile);
     }
@@ -144,11 +141,6 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> AddProfileCommand { get; }
 
     /// <summary>
-    ///     Interaction for showing the profile dialog
-    /// </summary>
-    public Interaction<ProfileDialogViewModel, ProfileViewModel?> ShowDialog { get; }
-
-    /// <summary>
     ///     Interaction for confirmation dialogs
     /// </summary>
     public Interaction<ConfirmDialogViewModel, bool> ShowConfirmDialog { get; }
@@ -203,9 +195,9 @@ public class MainWindowViewModel : ViewModelBase
         CloseFlyout();
     }
 
-    private async Task EditProfile(ProfileViewModel profile)
-    {
-        var dialog = new ProfileDialogViewModel
+    private void EditProfile(ProfileViewModel profile) =>
+        // Old dialog-based approach, kept for reference
+        /*var dialog = new ProfileDialogViewModel
         {
             Name     = profile.Name,
             WeightKg = profile.WeightKg
@@ -215,26 +207,29 @@ public class MainWindowViewModel : ViewModelBase
         if (result == null) return;
 
         profile.Name     = result.Name;
-        profile.WeightKg = result.WeightKg;
-    }
+        profile.WeightKg = result.WeightKg;*/
+        // New view-based approach
+        CurrentView = new EditProfileViewModel(this, profile);
 
-    private async void EditCurrentProfile()
+    private void EditCurrentProfile()
     {
         if (SelectedProfile == null) return;
-        await EditProfile(SelectedProfile);
-
-        // Force UI refresh
-        this.RaisePropertyChanged(nameof(SelectedProfile));
+        EditProfile(SelectedProfile);
     }
 
-    private async void AddProfile()
+    private void AddProfile()
     {
-        var dialog = new ProfileDialogViewModel();
+        // Old dialog-based approach, kept for reference
+        /*var dialog = new ProfileDialogViewModel();
         var result = await ShowDialog.Handle(dialog);
         if (result == null) return;
 
         Profiles.Add(result);
         SelectedProfile = result;
+        CloseFlyout();*/
+        
+        // New view-based approach
+        CurrentView = new EditProfileViewModel(this);
         CloseFlyout();
     }
 
