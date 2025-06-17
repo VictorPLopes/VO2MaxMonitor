@@ -10,10 +10,10 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class EditProfileViewModel : ViewModelBase
 {
-    private          string              _name;
-    private          double              _weightKg;
     private readonly MainWindowViewModel _mainVm;
-    private ProfileViewModel? _profile;
+    private          string              _name;
+    private          ProfileViewModel?   _profile;
+    private          double              _weightKg;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="EditProfileViewModel" /> class.
@@ -26,11 +26,11 @@ public class EditProfileViewModel : ViewModelBase
         _weightKg = profile?.WeightKg ?? 70.0;
         _mainVm   = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
         _profile  = profile;
-        
+
         var canSave = this.WhenAnyValue(
-            x => x.Name,
-            x => x.WeightKg,
-            (name, weight) => !string.IsNullOrWhiteSpace(name) && weight > 10.0);
+                                        x => x.Name,
+                                        x => x.WeightKg,
+                                        (name, weight) => !string.IsNullOrWhiteSpace(name) && weight > 10.0);
 
         SaveCommand = ReactiveCommand.Create(SaveProfile, canSave);
 
@@ -68,27 +68,25 @@ public class EditProfileViewModel : ViewModelBase
     private void SaveProfile()
     {
         // If profile is null, create a new one
-        if (_profile == null)
+        if (_profile is null)
         {
-            _profile = new ProfileViewModel(new Profile(
-                                                        Name,
-                                                        WeightKg
-                                                       ));
+            _profile = new ProfileViewModel(new Profile(Name, WeightKg));
             _mainVm.Profiles.Add(_profile);
-            _mainVm.SelectedProfile = _profile; // Set the newly created profile as the selected one
-            _mainVm.CurrentView     = new WelcomeViewModel(); // Navigate to the welcome view
+            // Set the newly created profile as the selected one
+            _mainVm.SelectedProfile = _profile;
         }
         else
         {
             // Update existing profile
             _profile.Name     = Name;
             _profile.WeightKg = WeightKg;
-            
+
             // Force UI update
             _mainVm.RaisePropertyChanged(nameof(_mainVm.SelectedProfile));
-            
-            _mainVm.CurrentView = new WelcomeViewModel(); // Navigate to the welcome view
         }
+
+        // Navigate to the welcome view
+        _mainVm.CurrentView = new WelcomeViewModel();
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();

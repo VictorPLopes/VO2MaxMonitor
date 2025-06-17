@@ -195,21 +195,7 @@ public class MainWindowViewModel : ViewModelBase
         CloseFlyout();
     }
 
-    private void EditProfile(ProfileViewModel profile) =>
-        // Old dialog-based approach, kept for reference
-        /*var dialog = new ProfileDialogViewModel
-        {
-            Name     = profile.Name,
-            WeightKg = profile.WeightKg
-        };
-
-        var result = await ShowDialog.Handle(dialog);
-        if (result == null) return;
-
-        profile.Name     = result.Name;
-        profile.WeightKg = result.WeightKg;*/
-        // New view-based approach
-        CurrentView = new EditProfileViewModel(this, profile);
+    private void EditProfile(ProfileViewModel profile) => CurrentView = new EditProfileViewModel(this, profile);
 
     private void EditCurrentProfile()
     {
@@ -219,16 +205,6 @@ public class MainWindowViewModel : ViewModelBase
 
     private void AddProfile()
     {
-        // Old dialog-based approach, kept for reference
-        /*var dialog = new ProfileDialogViewModel();
-        var result = await ShowDialog.Handle(dialog);
-        if (result == null) return;
-
-        Profiles.Add(result);
-        SelectedProfile = result;
-        CloseFlyout();*/
-        
-        // New view-based approach
         CurrentView = new EditProfileViewModel(this);
         CloseFlyout();
     }
