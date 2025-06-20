@@ -1,6 +1,10 @@
+using System;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.ReactiveUI;
+using Avalonia.Styling;
 using ReactiveUI;
 using VO2MaxMonitor.ViewModels;
 
@@ -30,5 +34,27 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         var result = await dialog.ShowDialog<bool>(this);
         interaction.SetOutput(result);
+    }
+
+    // Workaround to set padding for maximized windows on Windows OS.
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        // If the OS is not Windows, we don't need to apply this workaround.
+        if (!OperatingSystem.IsWindows()) return;
+
+        var style = new Style
+        {
+            Selector = Selectors.Is<Window>(null)
+                                .PropertyEquals(WindowStateProperty, WindowState.Maximized)
+        };
+
+        // On Windows, when a window is maximized, add padding to the window
+        var setter = new Setter
+        {
+            Property = PaddingProperty,
+            Value    = Thickness.Parse("8")
+        };
+        style.Add(setter);
+        Styles.Add(style);
     }
 }
