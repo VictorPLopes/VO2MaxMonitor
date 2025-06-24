@@ -7,60 +7,77 @@
              mc:Ignorable="d"
              x:Class="VO2MaxMonitor.Views.MeasurementDetailView"
              x:DataType="vm:MeasurementDetailViewModel">
-    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="8"
-            Padding="24"
-            Margin="16"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
-        <StackPanel Spacing="16" HorizontalAlignment="Center">
-            <Grid HorizontalAlignment="Stretch">
-                <!-- Exercise Type -->
-                <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                           HorizontalAlignment="Left" />
+    <Grid RowDefinitions="Auto, *">
+        <TextBlock Grid.Row="0" Text="Measurement Details"
+                                           Theme="{DynamicResource TitleTextBlockStyle}"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                           FontSize="28"
+                                           Margin="0"/>
+        <Border Grid.Row="1"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="{DynamicResource OverlayCornerRadius}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1.5"
+                Padding="16"
+                Margin="0, 24, 0, 0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel Spacing="16" HorizontalAlignment="Center">
+                <Grid HorizontalAlignment="Stretch">
+                    <!-- Exercise Type -->
+                    <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
+                               FontSize="16"
+                               Theme="{DynamicResource CaptionTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               HorizontalAlignment="Left" />
 
-                <!-- Delete button -->
-                <Button
-                    Command="{Binding DeleteCommand}"
-                    Background="{DynamicResource ControlFillColorTransparentBrush}"
-                    BorderBrush="{DynamicResource ControlFillColorTransparentBrush}"
-                    HorizontalAlignment="Right"
-                    FontSize="18"
-                    Padding="8"
-                    CornerRadius="8">
-                    <ui:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
-                </Button>
-            </Grid>
+                    <!-- Delete button -->
+                    <Button
+                        Command="{Binding DeleteCommand}"
+                        Background="{DynamicResource ControlFillColorTransparentBrush}"
+                        BorderBrush="{DynamicResource ControlFillColorTransparentBrush}"
+                        HorizontalAlignment="Right"
+                        FontSize="16"
+                        Padding="8"
+                        CornerRadius="4">
+                        <ui:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </Button>
+                </Grid>
 
-            <!-- V̇O₂ max Value -->
-            <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}"
-                       FontSize="48"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center" />
+                <!-- V̇O₂ max Value -->
+                <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}"
+                           FontSize="68"
+                           Theme="{DynamicResource DisplayTextBlockStyle}"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           HorizontalAlignment="Center" />
 
-            <!-- Metadata -->
-            <StackPanel Orientation="Horizontal"
-                        Spacing="24"
-                        HorizontalAlignment="Center">
-                <StackPanel Spacing="4">
-                    <TextBlock Text="Weight"
-                               FontSize="12"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                    <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
-                               FontSize="14" />
-                </StackPanel>
+                <!-- Metadata -->
+                <StackPanel Orientation="Horizontal"
+                            Spacing="24"
+                            HorizontalAlignment="Center">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Weight"
+                                   FontSize="12"
+                                   Theme="{DynamicResource CaptionTextBlockStyle}"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                        <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
+                                   FontSize="14"
+                                   Theme="{DynamicResource BodyTextBlockStyle}"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                    </StackPanel>
 
-                <StackPanel Spacing="4">
-                    <TextBlock Text="Date"
-                               FontSize="12"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                    <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
-                               FontSize="14" />
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Date"
+                                   FontSize="12"
+                                      Theme="{DynamicResource CaptionTextBlockStyle}"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                        <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
+                                   FontSize="14"
+                                   Theme="{DynamicResource BodyTextBlockStyle}"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </Border>
+        </Border>
+    </Grid>
 </UserControl>
