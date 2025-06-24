@@ -13,12 +13,12 @@
                        Theme="{DynamicResource TitleTextBlockStyle}"
                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                        FontSize="28"
-                       Margin="0,0,0,12"/>
+                       Margin="0,0,0,12" />
             <TextBlock Text="Best daily V̇O₂ max over last 30 recorded days"
                        Theme="{DynamicResource SubtitleTextBlockStyle}"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                        FontSize="20"
-                       Margin="0,0,0,24"/>
+                       Margin="0,0,0,24" />
         </StackPanel>
         <Border Grid.Row="1"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
@@ -27,9 +27,9 @@
                 BorderThickness="1.5"
                 Padding="16">
             <lvc:CartesianChart
-                                Series="{Binding Series}"
-                                XAxes="{Binding XAxes}"
-                                YAxes="{Binding YAxes}"/>
+                Series="{Binding Series}"
+                XAxes="{Binding XAxes}"
+                YAxes="{Binding YAxes}" />
         </Border>
     </Grid>
 </UserControl>

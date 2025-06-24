@@ -9,10 +9,10 @@
              x:DataType="vm:MeasurementDetailViewModel">
     <Grid RowDefinitions="Auto, *">
         <TextBlock Grid.Row="0" Text="Measurement Details"
-                                           Theme="{DynamicResource TitleTextBlockStyle}"
-                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                           FontSize="28"
-                                           Margin="0"/>
+                   Theme="{DynamicResource TitleTextBlockStyle}"
+                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                   FontSize="28"
+                   Margin="0" />
         <Border Grid.Row="1"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="{DynamicResource OverlayCornerRadius}"
@@ -63,13 +63,13 @@
                         <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
                                    FontSize="14"
                                    Theme="{DynamicResource BodyTextBlockStyle}"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                     </StackPanel>
 
                     <StackPanel Spacing="12">
                         <TextBlock Text="Date"
                                    FontSize="12"
-                                      Theme="{DynamicResource CaptionTextBlockStyle}"
+                                   Theme="{DynamicResource CaptionTextBlockStyle}"
                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                         <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
                                    FontSize="14"
