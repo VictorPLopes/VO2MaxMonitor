@@ -244,13 +244,13 @@
             <!-- Main Content Area -->
             <Border DockPanel.Dock="Right"
                     Margin="0,0,0,0"
+                    Padding="36"
                     Background="{DynamicResource LayerFillColorDefaultBrush}"
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1.5"
                     CornerRadius="8, 0, 0, 0">
                 <ContentControl Content="{Binding CurrentView}" />
             </Border>
-
         </DockPanel>
     </Grid>
 </Window>

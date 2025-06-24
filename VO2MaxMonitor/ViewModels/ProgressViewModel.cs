@@ -2,6 +2,13 @@
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Styling;
+using FluentAvalonia.Styling;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace VO2MaxMonitor.ViewModels;
 
@@ -11,6 +18,14 @@ namespace VO2MaxMonitor.ViewModels;
 /// <param name="profile">The <see cref="ProfileViewModel" /> from which the measurements will be extracted.</param>
 public class ProgressViewModel(ProfileViewModel profile) : ViewModelBase
 {
+    private static readonly SKColor PrimaryTextPaint = GetThemedSKColor("TextFillColorPrimaryBrush");
+    private static readonly SKColor SecondaryTextPaint = GetThemedSKColor("TextFillColorSecondaryBrush");
+    
+    /// <summary>
+    ///     Gets the name of the profile.
+    /// </summary>
+    public string ProfileName => profile.Name;
+    
     /// <summary>
     ///     Gets or sets the series to be displayed in the chart.
     /// </summary>
@@ -63,7 +78,9 @@ public class ProgressViewModel(ProfileViewModel profile) : ViewModelBase
                             .ToArray(), // Selects the date for each day, for a maximum of 30 days
             LabelsRotation = 15,
             Name           = "Date",
-            TextSize       = 12
+            TextSize       = 12,
+            LabelsPaint    = new SolidColorPaint(PrimaryTextPaint),
+            NamePaint      = new SolidColorPaint(PrimaryTextPaint)
         }
     ];
 
@@ -72,7 +89,36 @@ public class ProgressViewModel(ProfileViewModel profile) : ViewModelBase
     /// </summary>
     public Axis[] YAxes { get; set; } =
     [
-        new() { Name = "V̇O₂ max (mL/min/kg)", TextSize = 12 },
-        new() { Name = "Weight (kg)", TextSize          = 12, Position = AxisPosition.End }
+        new()
+        {
+            Name        = "V̇O₂ max (mL/min/kg)",
+            TextSize    = 12,
+            Position    = AxisPosition.Start,
+            LabelsPaint = new SolidColorPaint(PrimaryTextPaint),
+            NamePaint   = new SolidColorPaint(PrimaryTextPaint)
+        },
+        new()
+        {
+            Name        = "Weight (kg)",
+            TextSize    = 12,
+            Position    = AxisPosition.End,
+            LabelsPaint = new SolidColorPaint(PrimaryTextPaint),
+            NamePaint   = new SolidColorPaint(PrimaryTextPaint)
+        }
     ];
+    
+    // Helper function
+    private static SKColor GetThemedSKColor(string brushKey)
+    {
+        var app = Application.Current;
+        if (app is null)
+            return SKColor.Empty;
+
+        var theme = app.ActualThemeVariant;
+        
+        if (app?.TryFindResource(brushKey, theme, out var brushObj) != true ||
+            brushObj is not ISolidColorBrush brush) return SKColor.Empty;
+        var color = brush.Color;
+        return new SKColor(color.R, color.G, color.B, color.A);
+    }
 }
