@@ -45,11 +45,22 @@
                 </Grid>
 
                 <!-- V̇O₂ max Value -->
-                <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max}"
-                           FontSize="68"
-                           Theme="{DynamicResource DisplayTextBlockStyle}"
-                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                           HorizontalAlignment="Center" />
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max[0]}"
+                               FontSize="68"
+                               Theme="{DynamicResource DisplayTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Bottom" />
+                    <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max[1]}"
+                               FontSize="28"
+                               Theme="{DynamicResource SubtitleTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Bottom" />
+                </StackPanel>
 
                 <!-- Metadata -->
                 <StackPanel Orientation="Horizontal"

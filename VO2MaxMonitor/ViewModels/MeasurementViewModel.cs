@@ -23,9 +23,9 @@ public class MeasurementViewModel(Measurement model) : ViewModelBase
     public string FormattedDate => Model.ExerciseDate.ToString("g");
 
     /// <summary>
-    ///     Gets the formatted VO2Max value.
+    ///     Gets the formatted V̇O₂ max value.
     /// </summary>
-    public string FormattedVO2Max => $"{Model.VO2Max:F2} mL/min/kg";
+    public string[] FormattedVO2Max => [$"{Model.VO2Max:F2}", "mL/min/kg"];
 
     /// <summary>
     ///     Gets the exercise type.
