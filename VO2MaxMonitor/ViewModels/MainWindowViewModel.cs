@@ -47,7 +47,8 @@ public class MainWindowViewModel : ViewModelBase
 
         DownloadCsvCommand = ReactiveCommand.Create(() =>
         {
-            CurrentView = new DownloadCsvViewModel(SelectedProfile!.Name);
+            CurrentView =
+                new DownloadCsvViewModel(this, SelectedProfile!.Name);
         });
 
         CurrentView = new WelcomeViewModel();

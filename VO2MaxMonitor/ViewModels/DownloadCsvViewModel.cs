@@ -21,23 +21,25 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class DownloadCsvViewModel : ViewModelBase
 {
-    private readonly IFilesService _filesService;
-    private readonly List<Reading> _readings = [];
-    private          string        _broker   = string.Empty;
-    private          string        _filePath = string.Empty;
-    private          bool          _isDownloading;
-    private          IMqttClient?  _mqttClient;
-    private          string        _password = string.Empty;
-    private          int           _port     = 1883;
-    private          string        _topic    = string.Empty;
-    private          string        _username = string.Empty;
+    private readonly IFilesService       _filesService;
+    private readonly MainWindowViewModel _mainVm;
+    private readonly List<Reading>       _readings = [];
+    private          string              _broker   = string.Empty;
+    private          string              _filePath = string.Empty;
+    private          bool                _isDownloading;
+    private          IMqttClient?        _mqttClient;
+    private          string              _password = string.Empty;
+    private          int                 _port     = 1883;
+    private          string              _topic    = string.Empty;
+    private          string              _username = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DownloadCsvViewModel" /> class.
     /// </summary>
-    public DownloadCsvViewModel(string defaultUsername = "")
+    public DownloadCsvViewModel(MainWindowViewModel mainVm, string defaultUsername = "")
     {
         Username = defaultUsername;
+        _mainVm  = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
 
         var canDownload = this.WhenAnyValue(
                                             x => x.Broker,
@@ -55,6 +57,8 @@ public class DownloadCsvViewModel : ViewModelBase
         SaveCsvCommand = ReactiveCommand.CreateFromTask(SaveCsvFileAsync);
 
         StartStopCommand = ReactiveCommand.CreateFromTask(StartStopDownload, canDownload);
+
+        CancelCommand = ReactiveCommand.Create(Cancel);
     }
 
     /// <summary>
@@ -125,6 +129,11 @@ public class DownloadCsvViewModel : ViewModelBase
     ///     Gets the command for starting or stopping the download of readings from the MQTT broker.
     /// </summary>
     public ReactiveCommand<Unit, Unit> StartStopCommand { get; }
+
+    /// <summary>
+    ///     Command to cancel the dialog.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
     private async Task SaveCsvFileAsync()
     {
@@ -247,4 +256,6 @@ public class DownloadCsvViewModel : ViewModelBase
             _readings.Clear();
         }
     }
+
+    private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
 }

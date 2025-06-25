@@ -6,65 +6,123 @@
              mc:Ignorable="d"
              x:Class="VO2MaxMonitor.Views.DownloadCsvView"
              x:DataType="vm:DownloadCsvViewModel">
-    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="8"
-            Padding="24"
-            Margin="16"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
-        <StackPanel Spacing="16" Width="400">
-            <TextBlock Text="Download Data (MQTT)"
-                       FontSize="20"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,8" />
+    <Grid RowDefinitions="Auto,*">
+        <TextBlock Grid.Row="0"
+                   Text="Download Data (MQTT)"
+                   Theme="{DynamicResource TitleTextBlockStyle}"
+                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                   FontSize="28"
+                   Margin="0" />
+        <Border Grid.Row="1"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="{DynamicResource OverlayCornerRadius}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1.5"
+                Padding="16"
+                Margin="0, 24, 0, 0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel Spacing="16" Width="400">
+                <!-- MQTT Configuration -->
+                <Grid ColumnDefinitions="Auto, Auto, *"
+                      HorizontalAlignment="Stretch">
+                    <StackPanel Grid.Column="0" Spacing="12"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,12,0">
+                        <Label Content="_Broker Address"
+                               Target="BrokerTextBox"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               Theme="{DynamicResource LabelStyle}" />
+                        <TextBox x:Name="BrokerTextBox"
+                                 Watermark="localhost"
+                                 Text="{Binding Broker}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1"
+                                Spacing="12"
+                                HorizontalAlignment="Left"
+                                Margin="12,0">
+                        <Label Content="_Port"
+                               Target="PortTextBox"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               Theme="{DynamicResource LabelStyle}" />
+                        <TextBox x:Name="PortTextBox"
+                                 Watermark="1883"
+                                 Text="{Binding Port}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2"
+                                Spacing="12"
+                                HorizontalAlignment="Stretch"
+                                Margin="12,0,0,0">
+                        <Label Content="_Topic"
+                               Target="TopicTextBox"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               Theme="{DynamicResource LabelStyle}" />
+                        <TextBox x:Name="TopicTextBox"
+                                 Watermark="VO2MaxMonitor/Measurements"
+                                 Text="{Binding Topic}" />
+                    </StackPanel>
+                </Grid>
+                <UniformGrid Columns="2"
+                             HorizontalAlignment="Stretch">
+                    <StackPanel Spacing="12"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,12,0">
+                        <Label Content="_Username"
+                               Target="UsernameTextBox"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               Theme="{DynamicResource LabelStyle}" />
+                        <TextBox x:Name="UsernameTextBox"
+                                 Watermark="{Binding Username, Mode=OneTime}"
+                                 Text="{Binding Username}" />
+                    </StackPanel>
+                    <StackPanel Spacing="12"
+                                HorizontalAlignment="Stretch"
+                                Margin="12,0,0,0">
+                        <Label Content="_Password"
+                               Target="PasswordTextBox"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               Theme="{DynamicResource LabelStyle}" />
+                        <TextBox x:Name="PasswordTextBox"
+                                 PasswordChar="*"
+                                 Text="{Binding Password}" />
+                    </StackPanel>
+                </UniformGrid>
+                <Button Content="Select CSV File Destination"
+                        Command="{Binding SaveCsvCommand}"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="4" />
 
-            <!-- Broker Address -->
-            <TextBox Watermark="Broker Address"
-                     Text="{Binding Broker}" />
-
-            <!-- Port -->
-            <TextBox Watermark="Port"
-                     Text="{Binding Port}" />
-
-            <!-- Topic -->
-            <TextBox Watermark="Topic"
-                     Text="{Binding Topic}" />
-
-            <!-- Username -->
-            <TextBox Watermark="Username"
-                     Text="{Binding Username}" />
-
-            <!-- Password -->
-            <TextBox PasswordChar="*" Watermark="Password"
-                     Text="{Binding Password}" />
-
-            <!-- Save File -->
-            <Button Content="Select CSV File Destination"
-                    Command="{Binding SaveCsvCommand}"
-                    HorizontalAlignment="Stretch"
-                    CornerRadius="4" />
-
-            <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                    CornerRadius="4"
-                    Padding="8">
-                <TextBlock Text="{Binding FilePath}"
-                           TextWrapping="Wrap"
-                           FontSize="12" />
-            </Border>
-
-            <!-- Start / Stop Button -->
-            <Button Content="{Binding StartStopButtonText}"
-                    Command="{Binding StartStopCommand}"
-                    HorizontalAlignment="Stretch"
-                    Margin="0,16,0,0"
-                    CornerRadius="4"
-                    FontWeight="SemiBold" />
-
-            <!-- Stopwatch -->
-            <!--<TextBlock Text="{Binding StopwatchDisplay}"
-                       FontSize="14"
-                       HorizontalAlignment="Center"
-                       Margin="0,16,0,0" />-->
-        </StackPanel>
-    </Border>
+                <!-- File Selection -->
+                <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                        CornerRadius="4"
+                        Padding="8">
+                    <TextBlock Text="{Binding FilePath}"
+                               TextWrapping="Wrap"
+                               FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Theme="{DynamicResource CaptionTextBlockStyle}" />
+                </Border>
+                <UniformGrid Columns="2"
+                             HorizontalAlignment="Stretch">
+                    <Button Content="{Binding StartStopButtonText}"
+                            Command="{Binding StartStopCommand}"
+                            Background="{DynamicResource AccentFillColorDefaultBrush}"
+                            Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,16,12,0"
+                            CornerRadius="4" />
+                    <Button Content="Cancel"
+                            Command="{Binding CancelCommand}"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,16,12,0"
+                            CornerRadius="4" />
+                </UniformGrid>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
