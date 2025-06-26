@@ -21,6 +21,11 @@ public class EditProfileViewModel : ViewModelBase
     /// <param name="profile">The profile to edit, or null for a new profile.</param>
     public EditProfileViewModel(MainWindowViewModel mainVm, ProfileViewModel? profile = null)
     {
+        if (profile is not null && !string.IsNullOrWhiteSpace(profile.Name))
+            Title = "Editing \"" + profile.Name + "\"";
+        else
+            Title = "New Profile";
+        
         // Initialize properties from the profile or with defaults
         _name     = profile?.Name ?? string.Empty;
         _weightKg = profile?.WeightKg ?? 70.0;
