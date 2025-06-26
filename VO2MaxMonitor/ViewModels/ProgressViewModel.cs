@@ -15,6 +15,9 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class ProgressViewModel : ViewModelBase
 {
+    private static readonly SKColor PrimaryTextPaint   = GetThemedSKColor("TextFillColorPrimaryBrush");
+    private static readonly SKColor SecondaryTextPaint = GetThemedSKColor("TextFillColorSecondaryBrush");
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="ProgressViewModel" /> class.
     /// </summary>
@@ -22,8 +25,9 @@ public class ProgressViewModel : ViewModelBase
     public ProgressViewModel(ProfileViewModel profile)
     {
         Title = "Progress for " + profile.Model.Name;
-        
-        Series = [
+
+        Series =
+        [
             new LineSeries<double>
             {
                 Values = profile.Model.Measurements
@@ -53,7 +57,8 @@ public class ProgressViewModel : ViewModelBase
                 GeometrySize = 6
             }
         ];
-        XAxes = [
+        XAxes =
+        [
             new Axis
             {
                 Labels = profile.Model.Measurements
@@ -73,9 +78,6 @@ public class ProgressViewModel : ViewModelBase
         ];
     }
 
-    private static readonly SKColor PrimaryTextPaint   = GetThemedSKColor("TextFillColorPrimaryBrush");
-    private static readonly SKColor SecondaryTextPaint = GetThemedSKColor("TextFillColorSecondaryBrush");
-    
     /// <summary>
     ///     Gets or sets the series to be displayed in the chart.
     /// </summary>

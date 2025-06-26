@@ -8,80 +8,80 @@
              x:Class="VO2MaxMonitor.Views.MeasurementDetailView"
              x:DataType="vm:MeasurementDetailViewModel">
     <Border
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="{DynamicResource OverlayCornerRadius}"
-                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                BorderThickness="1.5"
-                Padding="16"
-                Margin="0, 24, 0, 0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-            <StackPanel Spacing="16" HorizontalAlignment="Center">
-                <Grid HorizontalAlignment="Stretch">
-                    <!-- Exercise Type -->
-                    <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
-                               FontSize="16"
+        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+        CornerRadius="{DynamicResource OverlayCornerRadius}"
+        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1.5"
+        Padding="16"
+        Margin="0, 24, 0, 0"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+        <StackPanel Spacing="16" HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Stretch">
+                <!-- Exercise Type -->
+                <TextBlock Text="{Binding MeasurementVm.ExerciseType}"
+                           FontSize="16"
+                           Theme="{DynamicResource CaptionTextBlockStyle}"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           HorizontalAlignment="Left" />
+
+                <!-- Delete button -->
+                <Button
+                    Command="{Binding DeleteCommand}"
+                    Background="{DynamicResource ControlFillColorTransparentBrush}"
+                    BorderBrush="{DynamicResource ControlFillColorTransparentBrush}"
+                    HorizontalAlignment="Right"
+                    FontSize="16"
+                    Padding="8"
+                    CornerRadius="4">
+                    <ui:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                </Button>
+            </Grid>
+
+            <!-- V̇O₂ max Value -->
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max[0]}"
+                           FontSize="68"
+                           Theme="{DynamicResource DisplayTextBlockStyle}"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom" />
+                <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max[1]}"
+                           FontSize="28"
+                           Theme="{DynamicResource SubtitleTextBlockStyle}"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom" />
+            </StackPanel>
+
+            <!-- Metadata -->
+            <StackPanel Orientation="Horizontal"
+                        Spacing="24"
+                        HorizontalAlignment="Center">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Weight"
+                               FontSize="12"
                                Theme="{DynamicResource CaptionTextBlockStyle}"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               HorizontalAlignment="Left" />
-
-                    <!-- Delete button -->
-                    <Button
-                        Command="{Binding DeleteCommand}"
-                        Background="{DynamicResource ControlFillColorTransparentBrush}"
-                        BorderBrush="{DynamicResource ControlFillColorTransparentBrush}"
-                        HorizontalAlignment="Right"
-                        FontSize="16"
-                        Padding="8"
-                        CornerRadius="4">
-                        <ui:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
-                    </Button>
-                </Grid>
-
-                <!-- V̇O₂ max Value -->
-                <StackPanel Orientation="Horizontal"
-                            Spacing="8"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max[0]}"
-                               FontSize="68"
-                               Theme="{DynamicResource DisplayTextBlockStyle}"
-                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Bottom" />
-                    <TextBlock Text="{Binding MeasurementVm.FormattedVO2Max[1]}"
-                               FontSize="28"
-                               Theme="{DynamicResource SubtitleTextBlockStyle}"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom" />
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
+                               FontSize="14"
+                               Theme="{DynamicResource BodyTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                 </StackPanel>
 
-                <!-- Metadata -->
-                <StackPanel Orientation="Horizontal"
-                            Spacing="24"
-                            HorizontalAlignment="Center">
-                    <StackPanel Spacing="12">
-                        <TextBlock Text="Weight"
-                                   FontSize="12"
-                                   Theme="{DynamicResource CaptionTextBlockStyle}"
-                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                        <TextBlock Text="{Binding MeasurementVm.FormattedWeightKg}"
-                                   FontSize="14"
-                                   Theme="{DynamicResource BodyTextBlockStyle}"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="12">
-                        <TextBlock Text="Date"
-                                   FontSize="12"
-                                   Theme="{DynamicResource CaptionTextBlockStyle}"
-                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                        <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
-                                   FontSize="14"
-                                   Theme="{DynamicResource BodyTextBlockStyle}"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
-                    </StackPanel>
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Date"
+                               FontSize="12"
+                               Theme="{DynamicResource CaptionTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    <TextBlock Text="{Binding MeasurementVm.FormattedDate}"
+                               FontSize="14"
+                               Theme="{DynamicResource BodyTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                 </StackPanel>
             </StackPanel>
-        </Border>
+        </StackPanel>
+    </Border>
 </UserControl>

@@ -20,7 +20,7 @@ public class MeasurementDetailViewModel : ViewModelBase
     {
         MeasurementVm = measurementVm ?? throw new ArgumentNullException(nameof(measurementVm));
         _mainVm       = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
-        
+
         Title = "Measurement Details";
 
         DeleteCommand = ReactiveCommand.Create(DeleteMeasurement);

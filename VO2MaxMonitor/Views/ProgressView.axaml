@@ -14,15 +14,16 @@
         BorderThickness="1.5"
         Padding="16">
         <Grid RowDefinitions="Auto,*">
-            <TextBlock Grid.Row="0" Text="{Binding XAxes[0].Labels.Count, StringFormat='Best daily V̇O₂ max over last {0} recorded days'}"
+            <TextBlock Grid.Row="0"
+                       Text="{Binding XAxes[0].Labels.Count, StringFormat='Best daily V̇O₂ max over last {0} recorded days'}"
                        Theme="{DynamicResource CaptionTextBlockStyle}"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                        FontSize="12"
                        Margin="0,0,0,12" />
             <lvc:CartesianChart Grid.Row="1"
-                Series="{Binding Series}"
-                XAxes="{Binding XAxes}"
-                YAxes="{Binding YAxes}" />
+                                Series="{Binding Series}"
+                                XAxes="{Binding XAxes}"
+                                YAxes="{Binding YAxes}" />
         </Grid>
     </Border>
 </UserControl>

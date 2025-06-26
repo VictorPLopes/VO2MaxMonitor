@@ -7,26 +7,39 @@
              x:Class="VO2MaxMonitor.Views.NewMeasurementView"
              x:DataType="vm:NewMeasurementViewModel">
     <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="8"
-            Padding="24"
-            Margin="16"
+            CornerRadius="{DynamicResource OverlayCornerRadius}"
+            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1.5"
+            Padding="16"
+            Margin="0,24,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
         <StackPanel Spacing="16" Width="400">
-            <TextBlock Text="New Measurement"
-                       FontSize="20"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,8" />
-
             <!-- Exercise Type -->
-            <TextBox Watermark="Exercise Type"
-                     Text="{Binding ExerciseType}" />
+            <StackPanel Spacing="12">
+                <Label Content="_Exercise Type"
+                       Target="ExerciseTypeTextBox"
+                       FontSize="14"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                       Theme="{DynamicResource LabelStyle}" />
+                <TextBox x:Name="ExerciseTypeTextBox"
+                         Watermark="Treadmill, Cycling, Running, etc."
+                         Text="{Binding ExerciseType}" />
+            </StackPanel>
 
             <!-- Weight -->
-            <TextBox Watermark="Weight (kg)"
-                     Text="{Binding WeightKg}" />
+            <StackPanel Spacing="12">
+                <Label Content="_Weight (kg)"
+                       Target="WeightTextBox"
+                       FontSize="14"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                       Theme="{DynamicResource LabelStyle}" />
+                <TextBox x:Name="WeightTextBox"
+                         Watermark="e.g. 70"
+                         Text="{Binding WeightKg}" />
+            </StackPanel>
 
-            <!-- File Selection -->
+            <!-- CSV File Selection -->
             <Button Content="Select CSV File"
                     Command="{Binding SelectCsvCommand}"
                     HorizontalAlignment="Stretch"
@@ -37,16 +50,27 @@
                     Padding="8">
                 <TextBlock Text="{Binding FilePath}"
                            TextWrapping="Wrap"
-                           FontSize="12" />
+                           FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Theme="{DynamicResource CaptionTextBlockStyle}" />
             </Border>
 
-            <!-- Compute Button -->
-            <Button Content="Compute VO₂ Max"
-                    Command="{Binding ComputeCommand}"
-                    HorizontalAlignment="Stretch"
-                    Margin="0,16,0,0"
-                    CornerRadius="4"
-                    FontWeight="SemiBold" />
+            <!-- Action Buttons -->
+            <UniformGrid Columns="2"
+                         HorizontalAlignment="Stretch">
+                <Button Content="Compute VO₂ Max"
+                        Command="{Binding ComputeCommand}"
+                        Background="{DynamicResource AccentFillColorDefaultBrush}"
+                        Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,16,12,0"
+                        CornerRadius="4" />
+                <Button Content="Cancel"
+                        Command="{Binding CancelCommand}"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,16,0,0"
+                        CornerRadius="4" />
+            </UniformGrid>
         </StackPanel>
     </Border>
 </UserControl>

@@ -39,7 +39,7 @@ public class DownloadCsvViewModel : ViewModelBase
     public DownloadCsvViewModel(MainWindowViewModel mainVm, string defaultUsername = "")
     {
         Title = "Download Data (MQTT)";
-        
+
         Username = defaultUsername;
         _mainVm  = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
 
@@ -56,11 +56,9 @@ public class DownloadCsvViewModel : ViewModelBase
                                                 !string.IsNullOrWhiteSpace(filePath) &&
                                                 port > 0);
 
-        SaveCsvCommand = ReactiveCommand.CreateFromTask(SaveCsvFileAsync);
-
+        SaveCsvCommand   = ReactiveCommand.CreateFromTask(SaveCsvFileAsync);
         StartStopCommand = ReactiveCommand.CreateFromTask(StartStopDownload, canDownload);
-
-        CancelCommand = ReactiveCommand.Create(Cancel);
+        CancelCommand    = ReactiveCommand.Create(Cancel);
     }
 
     /// <summary>
@@ -133,7 +131,7 @@ public class DownloadCsvViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> StartStopCommand { get; }
 
     /// <summary>
-    ///     Command to cancel the dialog.
+    ///     Command to cancel the action.
     /// </summary>
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 

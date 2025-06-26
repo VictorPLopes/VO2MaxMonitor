@@ -21,7 +21,7 @@ public class NewMeasurementViewModel : ViewModelBase
     private readonly IFilesService       _filesService;
     private readonly MainWindowViewModel _mainVm;
     private readonly IVO2MaxCalculator   _vo2Calculator;
-    private          string              _exerciseType = "Treadmill";
+    private          string              _exerciseType = string.Empty;
     private          string              _filePath     = string.Empty;
     private          double              _weightKg;
 
@@ -34,7 +34,7 @@ public class NewMeasurementViewModel : ViewModelBase
         IVO2MaxCalculator   vo2Calculator)
     {
         _mainVm        = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
-        _weightKg      = mainVm.SelectedProfile?.WeightKg ?? 70.0;
+        _weightKg      = mainVm.SelectedProfile?.WeightKg ?? 0;
         _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
 
         var canCompute = this.WhenAnyValue(
@@ -48,6 +48,7 @@ public class NewMeasurementViewModel : ViewModelBase
 
         SelectCsvCommand = ReactiveCommand.CreateFromTask(SelectCsvFileAsync);
         ComputeCommand   = ReactiveCommand.Create(ComputeVO2Max, canCompute);
+        CancelCommand    = ReactiveCommand.Create(Cancel);
     }
 
     /// <summary>
@@ -65,12 +66,7 @@ public class NewMeasurementViewModel : ViewModelBase
     public double WeightKg
     {
         get => _weightKg;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _weightKg, value);
-            if (_mainVm.SelectedProfile == null) return;
-            _mainVm.SelectedProfile.WeightKg = value;
-        }
+        set => this.RaiseAndSetIfChanged(ref _weightKg, value);
     }
 
     /// <summary>
@@ -91,6 +87,11 @@ public class NewMeasurementViewModel : ViewModelBase
     ///     Gets the command for computing VO2Max from the selected file.
     /// </summary>
     public ReactiveCommand<Unit, Unit> ComputeCommand { get; }
+
+    /// <summary>
+    ///     Command to cancel the action.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
     private async Task SelectCsvFileAsync()
     {
@@ -113,6 +114,10 @@ public class NewMeasurementViewModel : ViewModelBase
 
     private void ComputeVO2Max()
     {
+        // Update the weight in the selected profile if it exists
+        if (_mainVm.SelectedProfile is not null)
+            _mainVm.SelectedProfile.WeightKg = WeightKg;
+
         try
         {
             List<Reading> readings;
@@ -132,4 +137,6 @@ public class NewMeasurementViewModel : ViewModelBase
             Console.WriteLine($"Error computing VO2Max: {ex.Message}");
         }
     }
+
+    private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
 }
