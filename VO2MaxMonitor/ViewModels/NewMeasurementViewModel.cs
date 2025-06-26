@@ -33,6 +33,8 @@ public class NewMeasurementViewModel : ViewModelBase
         MainWindowViewModel mainVm,
         IVO2MaxCalculator   vo2Calculator)
     {
+        Title = "New Measurement";
+        
         _mainVm        = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
         _weightKg      = mainVm.SelectedProfile?.WeightKg ?? 0;
         _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
