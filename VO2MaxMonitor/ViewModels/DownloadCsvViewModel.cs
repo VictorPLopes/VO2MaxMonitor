@@ -38,6 +38,8 @@ public class DownloadCsvViewModel : ViewModelBase
     /// </summary>
     public DownloadCsvViewModel(MainWindowViewModel mainVm, string defaultUsername = "")
     {
+        Title = "Download Data (MQTT)";
+        
         Username = defaultUsername;
         _mainVm  = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
 

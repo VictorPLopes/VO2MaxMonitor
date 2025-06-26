@@ -7,4 +7,8 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class ViewModelBase : ReactiveObject
 {
+    /// <summary>
+    ///     Title of the view model passed to the view.
+    /// </summary>
+    public string Title { get; set; } = string.Empty;
 }

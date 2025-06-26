@@ -5,4 +5,8 @@
 /// </summary>
 public class WelcomeViewModel : ViewModelBase
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="WelcomeViewModel"/> class.
+    /// </summary>
+    public WelcomeViewModel() => Title = "Welcome to V̇O₂ Max Monitor";
 }

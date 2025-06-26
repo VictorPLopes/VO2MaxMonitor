@@ -243,13 +243,25 @@
 
             <!-- Main Content Area -->
             <Border DockPanel.Dock="Right"
-                    Margin="0,0,0,0"
-                    Padding="36"
+                    Margin="0"
+                    Padding="0"
                     Background="{DynamicResource LayerFillColorDefaultBrush}"
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1.5"
                     CornerRadius="8, 0, 0, 0">
-                <ContentControl Content="{Binding CurrentView}" />
+                <Grid RowDefinitions="Auto, *">
+                    <!-- Title -->
+                    <TextBlock Grid.Row="0" Text="{Binding CurrentView.Title}"
+                               Theme="{DynamicResource TitleTextBlockStyle}"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               FontSize="28"
+                               Margin="36, 36, 36, 24" />
+                    <!-- Content -->
+                    <ScrollViewer Grid.Row="1"
+                                  Padding="36, 0, 36, 36">
+                        <ContentControl Content="{Binding CurrentView}" />
+                    </ScrollViewer>
+                </Grid>
             </Border>
         </DockPanel>
     </Grid>

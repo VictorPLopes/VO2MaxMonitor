@@ -7,29 +7,22 @@
              mc:Ignorable="d"
              x:Class="VO2MaxMonitor.Views.ProgressView"
              x:DataType="vm:ProgressViewModel">
-    <Grid RowDefinitions="Auto, *">
-        <StackPanel Grid.Row="0">
-            <TextBlock Text="{Binding ProfileName, StringFormat='Progress for {0}'}"
-                       Theme="{DynamicResource TitleTextBlockStyle}"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                       FontSize="28"
-                       Margin="0,0,0,12" />
-            <TextBlock Text="Best daily V̇O₂ max over last 30 recorded days"
-                       Theme="{DynamicResource SubtitleTextBlockStyle}"
+    <Border
+        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+        CornerRadius="{DynamicResource OverlayCornerRadius}"
+        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1.5"
+        Padding="16">
+        <Grid RowDefinitions="Auto,*">
+            <TextBlock Grid.Row="0" Text="{Binding XAxes[0].Labels.Count, StringFormat='Best daily V̇O₂ max over last {0} recorded days'}"
+                       Theme="{DynamicResource CaptionTextBlockStyle}"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                       FontSize="20"
-                       Margin="0,0,0,24" />
-        </StackPanel>
-        <Border Grid.Row="1"
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="{DynamicResource OverlayCornerRadius}"
-                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                BorderThickness="1.5"
-                Padding="16">
-            <lvc:CartesianChart
+                       FontSize="12"
+                       Margin="0,0,0,12" />
+            <lvc:CartesianChart Grid.Row="1"
                 Series="{Binding Series}"
                 XAxes="{Binding XAxes}"
                 YAxes="{Binding YAxes}" />
-        </Border>
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

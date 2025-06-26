@@ -7,13 +7,7 @@
              mc:Ignorable="d"
              x:Class="VO2MaxMonitor.Views.MeasurementDetailView"
              x:DataType="vm:MeasurementDetailViewModel">
-    <Grid RowDefinitions="Auto, *">
-        <TextBlock Grid.Row="0" Text="Measurement Details"
-                   Theme="{DynamicResource TitleTextBlockStyle}"
-                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                   FontSize="28"
-                   Margin="0" />
-        <Border Grid.Row="1"
+    <Border
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="{DynamicResource OverlayCornerRadius}"
                 BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
@@ -90,5 +84,4 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-    </Grid>
 </UserControl>

@@ -6,14 +6,7 @@
              mc:Ignorable="d"
              x:Class="VO2MaxMonitor.Views.DownloadCsvView"
              x:DataType="vm:DownloadCsvViewModel">
-    <Grid RowDefinitions="Auto,*">
-        <TextBlock Grid.Row="0"
-                   Text="Download Data (MQTT)"
-                   Theme="{DynamicResource TitleTextBlockStyle}"
-                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                   FontSize="28"
-                   Margin="0" />
-        <Border Grid.Row="1"
+    <Border
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="{DynamicResource OverlayCornerRadius}"
                 BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
@@ -124,5 +117,4 @@
                 </UniformGrid>
             </StackPanel>
         </Border>
-    </Grid>
 </UserControl>
