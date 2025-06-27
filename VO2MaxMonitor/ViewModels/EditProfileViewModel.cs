@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reactive;
 using ReactiveUI;
 using VO2MaxMonitor.Models;
@@ -13,7 +14,7 @@ public class EditProfileViewModel : ViewModelBase
     private readonly MainWindowViewModel _mainVm;
     private          string              _name;
     private          ProfileViewModel?   _profile;
-    private          double              _weightKg;
+    private          string              _weightKg;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="EditProfileViewModel" /> class.
@@ -28,14 +29,14 @@ public class EditProfileViewModel : ViewModelBase
         
         // Initialize properties from the profile or with defaults
         _name     = profile?.Name ?? string.Empty;
-        _weightKg = profile?.WeightKg ?? 70.0;
+        _weightKg = (profile?.WeightKg ?? 70.0).ToString(CultureInfo.InvariantCulture);
         _mainVm   = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
         _profile  = profile;
 
         var canSave = this.WhenAnyValue(
                                         x => x.Name,
                                         x => x.WeightKg,
-                                        (name, weight) => !string.IsNullOrWhiteSpace(name) && weight > 10.0);
+                                        (name, weight) => !string.IsNullOrWhiteSpace(name) && IsValidWeight(weight));
 
         SaveCommand = ReactiveCommand.Create(SaveProfile, canSave);
 
@@ -54,7 +55,7 @@ public class EditProfileViewModel : ViewModelBase
     /// <summary>
     ///     Gets or sets the body mass of the subject in kilograms.
     /// </summary>
-    public double WeightKg
+    public string WeightKg
     {
         get => _weightKg;
         set => this.RaiseAndSetIfChanged(ref _weightKg, value);
@@ -72,10 +73,12 @@ public class EditProfileViewModel : ViewModelBase
 
     private void SaveProfile()
     {
+        var parsedWeight = double.Parse(WeightKg, CultureInfo.InvariantCulture);
+        
         // If profile is null, create a new one
         if (_profile is null)
         {
-            _profile = new ProfileViewModel(new Profile(Name, WeightKg));
+            _profile = new ProfileViewModel(new Profile(Name, parsedWeight));
             _mainVm.Profiles.Add(_profile);
             // Set the newly created profile as the selected one
             _mainVm.SelectedProfile = _profile;
@@ -84,7 +87,7 @@ public class EditProfileViewModel : ViewModelBase
         {
             // Update existing profile
             _profile.Name     = Name;
-            _profile.WeightKg = WeightKg;
+            _profile.WeightKg = parsedWeight;
 
             // Force UI update
             _mainVm.RaisePropertyChanged(nameof(_mainVm.SelectedProfile));
@@ -95,4 +98,8 @@ public class EditProfileViewModel : ViewModelBase
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
+    
+    // Validate the weight input
+    private static bool IsValidWeight(string weight) => 
+        double.TryParse(weight, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) && result is > 0 and < 300;
 }

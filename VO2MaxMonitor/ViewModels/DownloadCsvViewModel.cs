@@ -29,7 +29,7 @@ public class DownloadCsvViewModel : ViewModelBase
     private          bool                _isDownloading;
     private          IMqttClient?        _mqttClient;
     private          string              _password = string.Empty;
-    private          int                 _port     = 1883;
+    private          string              _port     = "1883";
     private          string              _topic    = string.Empty;
     private          string              _username = string.Empty;
 
@@ -54,7 +54,7 @@ public class DownloadCsvViewModel : ViewModelBase
                                                 !string.IsNullOrWhiteSpace(topic) &&
                                                 !string.IsNullOrWhiteSpace(username) &&
                                                 !string.IsNullOrWhiteSpace(filePath) &&
-                                                port > 0);
+                                                IsValidPort(port));
 
         SaveCsvCommand   = ReactiveCommand.CreateFromTask(SaveCsvFileAsync);
         StartStopCommand = ReactiveCommand.CreateFromTask(StartStopDownload, canDownload);
@@ -73,7 +73,7 @@ public class DownloadCsvViewModel : ViewModelBase
     /// <summary>
     ///     Gets or sets the MQTT port.
     /// </summary>
-    public int Port
+    public string Port
     {
         get => _port;
         set => this.RaiseAndSetIfChanged(ref _port, value);
@@ -170,7 +170,7 @@ public class DownloadCsvViewModel : ViewModelBase
 
             // Create MQTT client options
             var options = new MqttClientOptionsBuilder()
-                          .WithTcpServer(Broker, Port)
+                          .WithTcpServer(Broker, int.Parse(Port))
                           .WithCredentials(Username, Password)
                           .WithClientId(Guid.NewGuid().ToString())
                           .WithCleanSession()
@@ -258,4 +258,7 @@ public class DownloadCsvViewModel : ViewModelBase
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
+    
+    private static bool IsValidPort(string port) =>
+        int.TryParse(port, out var p) && p is > 0 and <= 65535 && port.Length <= 5;
 }

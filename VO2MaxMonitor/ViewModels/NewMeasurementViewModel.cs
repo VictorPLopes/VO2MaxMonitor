@@ -23,7 +23,7 @@ public class NewMeasurementViewModel : ViewModelBase
     private readonly IVO2MaxCalculator   _vo2Calculator;
     private          string              _exerciseType = string.Empty;
     private          string              _filePath     = string.Empty;
-    private          double              _weightKg;
+    private          string              _weightKg;
 
 
     /// <summary>
@@ -36,7 +36,7 @@ public class NewMeasurementViewModel : ViewModelBase
         Title = "New Measurement";
         
         _mainVm        = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
-        _weightKg      = mainVm.SelectedProfile?.WeightKg ?? 0;
+        _weightKg      = (mainVm.SelectedProfile?.WeightKg ?? 0).ToString(CultureInfo.InvariantCulture);
         _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
 
         var canCompute = this.WhenAnyValue(
@@ -46,7 +46,7 @@ public class NewMeasurementViewModel : ViewModelBase
                                            (weight, filePath, exerciseType) =>
                                                !string.IsNullOrWhiteSpace(filePath) &&
                                                !string.IsNullOrWhiteSpace(exerciseType) &&
-                                               weight > 0);
+                                               IsValidWeight(weight));
 
         SelectCsvCommand = ReactiveCommand.CreateFromTask(SelectCsvFileAsync);
         ComputeCommand   = ReactiveCommand.Create(ComputeVO2Max, canCompute);
@@ -65,7 +65,7 @@ public class NewMeasurementViewModel : ViewModelBase
     /// <summary>
     ///     Gets or sets the subject's weight in kilograms.
     /// </summary>
-    public double WeightKg
+    public string WeightKg
     {
         get => _weightKg;
         set => this.RaiseAndSetIfChanged(ref _weightKg, value);
@@ -116,9 +116,11 @@ public class NewMeasurementViewModel : ViewModelBase
 
     private void ComputeVO2Max()
     {
+        var parsedWeight = double.Parse(WeightKg, CultureInfo.InvariantCulture);
+        
         // Update the weight in the selected profile if it exists
         if (_mainVm.SelectedProfile is not null)
-            _mainVm.SelectedProfile.WeightKg = WeightKg;
+            _mainVm.SelectedProfile.WeightKg = parsedWeight;
 
         try
         {
@@ -127,8 +129,8 @@ public class NewMeasurementViewModel : ViewModelBase
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                     readings = csv.GetRecords<Reading>().ToList();
 
-            var vo2Max        = _vo2Calculator.Calculate(readings, _weightKg);
-            var measurement   = new Measurement(vo2Max, _weightKg, _exerciseType);
+            var vo2Max        = _vo2Calculator.Calculate(readings, parsedWeight);
+            var measurement   = new Measurement(vo2Max, parsedWeight, _exerciseType);
             var measurementVm = new MeasurementViewModel(measurement);
 
             _mainVm.SelectedProfile?.AddMeasurement(measurementVm);
@@ -141,4 +143,8 @@ public class NewMeasurementViewModel : ViewModelBase
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
+    
+    // Validate the weight input
+    private static bool IsValidWeight(string weight) => 
+        double.TryParse(weight, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) && result is > 0 and < 300;
 }
