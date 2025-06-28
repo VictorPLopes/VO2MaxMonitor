@@ -34,22 +34,11 @@ public class MainWindowViewModel : ViewModelBase
         ShowConfirmDialog = new Interaction<ConfirmDialogViewModel, bool>();
 
         // Initialize commands
-        AddMeasurementCommand = ReactiveCommand.Create(() =>
-        {
-            CurrentView = new NewMeasurementViewModel(
-                                                      this,
-                                                      _services.GetRequiredService<IVO2MaxCalculator>()
-                                                     );
-        });
         AddMeasurementCommand = ReactiveCommand.Create(ShowNewMeasurementView);
 
-        ShowProgressCommand = ReactiveCommand.Create(() => { CurrentView = new ProgressViewModel(SelectedProfile); });
+        ShowProgressCommand = ReactiveCommand.Create(ShowProgressView);
 
-        DownloadCsvCommand = ReactiveCommand.Create(() =>
-        {
-            CurrentView =
-                new DownloadCsvViewModel(this, SelectedProfile!.Name);
-        });
+        DownloadCsvCommand = ReactiveCommand.Create(ShowDownloadCsvView);
 
         CurrentView = new WelcomeViewModel();
 
@@ -182,8 +171,23 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void SetFlyout(FlyoutBase flyout) => _profileFlyout = flyout;
 
-    private void ShowNewMeasurementView() =>
-        CurrentView = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
+    private void ShowNewMeasurementView()
+    {
+        SelectedMeasurement = null;
+        CurrentView         = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
+    }
+    
+    private void ShowDownloadCsvView()
+    {
+        SelectedMeasurement = null;
+        CurrentView         = new DownloadCsvViewModel(this, SelectedProfile!.Name);
+    }
+
+    private void ShowProgressView()
+    {
+        SelectedMeasurement = null;
+        CurrentView         = new ProgressViewModel(SelectedProfile);
+    }
 
     // This is handled automatically by the Flyout in XAML
     private static void ShowProfileFlyout()
@@ -196,7 +200,11 @@ public class MainWindowViewModel : ViewModelBase
         CloseFlyout();
     }
 
-    private void EditProfile(ProfileViewModel profile) => CurrentView = new EditProfileViewModel(this, profile);
+    private void EditProfile(ProfileViewModel profile)
+    {
+        SelectedMeasurement = null;
+        CurrentView         = new EditProfileViewModel(this, profile);
+    }
 
     private void EditCurrentProfile()
     {
@@ -206,7 +214,8 @@ public class MainWindowViewModel : ViewModelBase
 
     private void AddProfile()
     {
-        CurrentView = new EditProfileViewModel(this);
+        SelectedMeasurement = null;
+        CurrentView         = new EditProfileViewModel(this);
         CloseFlyout();
     }
 
