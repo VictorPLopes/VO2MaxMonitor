@@ -76,8 +76,8 @@ Data can be provided either:
 - [.NET 9.0 Runtime Desktop](https://dotnet.microsoft.com/en-us/download/dotnet/9.0/runtime) or later
 - Windows<sup>1</sup> 10/11, macOS<sup>2</sup>, or Linux<sup>3</sup>
 
-<sup>1</sup> Windows 10 should be compatible, but has not been tested yet. The app takes advantage of Mica effects, which are only available in Windows 11.
-<sup>2</sup> macOS support is theoretical and has not been tested yet (I do not have any Apple devices).
+<sup>1</sup> Windows 10 should be compatible, but has not been tested yet. The app takes advantage of Mica effects, which are only available in Windows 11. <br>
+<sup>2</sup> macOS support is theoretical and has not been tested yet (I do not have any Apple devices). <br>
 <sup>3</sup> Tested on Kubuntu 25.04, should work on other distributions with .NET 9.0 support, but more advanced graphical features such as blurred backgrounds may not work on all Linux desktop environments (works on KDE Plasma).
 
 ### Download
