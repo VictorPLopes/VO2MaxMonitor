@@ -73,7 +73,6 @@ Data can be provided either:
 ## Installation
 
 ### Requirements
-- [.NET 9.0 Runtime Desktop](https://dotnet.microsoft.com/en-us/download/dotnet/9.0/runtime) or later
 - Windows<sup>1</sup> 10/11, macOS<sup>2</sup>, or Linux<sup>3</sup>
 
 <sup>1</sup> Windows 10 should be compatible, but has not been tested yet. The app takes advantage of Mica effects, which are only available in Windows 11. <br>
@@ -84,12 +83,16 @@ Data can be provided either:
 Pre-built binaries are available in the [Releases](https://github.com/VictorPLopes/VO2MaxMonitor/releases) section.
 
 ### Build from Source
+
+#### Requirements
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download) or later
+
 ```bash
 git clone https://github.com/VictorPLopes/VO2MaxMonitor.git
 cd VO2MaxMonitor
 dotnet publish -c Release -r <RID> --self-contained true
 ```
-Replace `<RID>` with your platform identifier (e.g., `win-x64`, `osx-x64`, `linux-x64`).
+Replace `<RID>` with your platform identifier (e.g., `win-x64`, `osx-x64`, `osx-arm64`,`linux-x64`).
 
 ## Usage
 
