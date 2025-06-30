@@ -227,8 +227,7 @@ public class MainWindowViewModel : ViewModelBase
             Message = $"Are you sure you want to delete profile '{profile.Name}'?"
         };
 
-        var shouldDelete = await ShowConfirmDialog.Handle(confirm);
-        if (!shouldDelete) return;
+        if (!await ShowConfirmDialog.Handle(confirm)) return;
 
         Profiles.Remove(profile);
         CloseFlyout();
