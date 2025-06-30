@@ -138,6 +138,14 @@ The VO₂ max calculator uses these default parameters (customizable in code):
 - Ambient O₂ percentage: 20.93%
 - Computation interval: 30,000 ms
 
+## Future Ideas and Plans
+- **Device Integration**: implement direct device communication via Bluetooth and/or USB for real-time data collection.
+- **Mobile Port**: create a mobile version for Android (and possibly iOS) to allow on-the-go measurements.
+- **Translation Support**: add localization for more languages (currently Portuguese is the only planned language).
+- **Data Export**: implement CSV export for measurement history.
+- **Manual Tweaking of Calculation Parameters**: allow users to adjust parameters like air density, dryness factor, and ambient O₂ percentage through the UI.
+- **More Robust Theming**: allow users to manually select between the light and dark theme regardless of system settings and make theming more consistent (especially on the charts).
+
 ## Credits, Acknowledgements, and Special Thanks
 - V̇O₂ max calculation algorithm inspired by [rabbitcreek's Accurate VO2 Max for Zwift and Strava.](https://www.instructables.com/Accurate-VO2-Max-for-Zwift-and-Strava/)
 - [Fake Athlete](https://gist.github.com/VictorPLopes/febac0231d3737dbafaff2204a1819d1) developed by myself for generating test data
