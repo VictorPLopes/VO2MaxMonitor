@@ -41,18 +41,19 @@
 
             <!-- Action Buttons -->
             <UniformGrid Columns="2"
-                         HorizontalAlignment="Stretch">
+                         HorizontalAlignment="Stretch"
+                         Margin="0,16,0,0">
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"
                         Background="{DynamicResource AccentFillColorDefaultBrush}"
                         Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
                         HorizontalAlignment="Stretch"
-                        Margin="0,16,12,0"
+                        Margin="0,0,4,0"
                         CornerRadius="4" />
                 <Button Content="Cancel"
                         Command="{Binding CancelCommand}"
                         HorizontalAlignment="Stretch"
-                        Margin="0,16,0,0"
+                        Margin="4,0,0,0"
                         CornerRadius="4" />
             </UniformGrid>
         </StackPanel>
