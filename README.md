@@ -142,6 +142,7 @@ The VO₂ max calculator uses these default parameters (customizable in code):
 - Computation interval: 30,000 ms
 
 ## Future Ideas and Plans
+- **Improve MQTT UI**: enhance the MQTT download UI with progress indicators, error handling, a stopwatch, and a count of received messages.
 - **Device Integration**: implement direct device communication via Bluetooth and/or USB for real-time data collection.
 - **Mobile Port**: create a mobile version for Android (and possibly iOS) to allow on-the-go measurements.
 - **Translation Support**: add localization for more languages (currently Portuguese is the only planned language).
