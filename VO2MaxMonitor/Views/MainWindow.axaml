@@ -24,13 +24,24 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="48,*">
-        <!-- Title -->
-        <TextBlock Grid.Row="0"
-                   Theme="{DynamicResource CaptionTextBlockStyle}"
-                   FontSize="12"
-                   Margin="16, 16, 0, 0"
-                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                   Text="V̇O₂ Max Monitor" />
+        <!-- Icon and title -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Spacing="12"
+                    Margin="16, 16, 0, 0">
+            <!-- Application Icon -->
+            <Image Source="/Assets/vo2-max-monitor-logo.ico"
+                   Width="16"
+                   Height="16"
+                   Margin="0, 0, 0, 16"/>
+            <!-- Title -->
+            <TextBlock
+                       Theme="{DynamicResource CaptionTextBlockStyle}"
+                       FontSize="12"
+                       Margin="0"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                       Text="V̇O₂ Max Monitor" />
+        </StackPanel>
 
         <!-- App Layout -->
         <DockPanel Grid.Row="1" Margin="0">
