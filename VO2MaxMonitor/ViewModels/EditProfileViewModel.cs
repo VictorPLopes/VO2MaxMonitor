@@ -26,7 +26,7 @@ public class EditProfileViewModel : ViewModelBase
             Title = "Editing \"" + profile.Name + "\"";
         else
             Title = "New Profile";
-        
+
         // Initialize properties from the profile or with defaults
         _name     = profile?.Name ?? string.Empty;
         _weightKg = (profile?.WeightKg ?? 70.0).ToString(CultureInfo.InvariantCulture);
@@ -74,7 +74,7 @@ public class EditProfileViewModel : ViewModelBase
     private void SaveProfile()
     {
         var parsedWeight = double.Parse(WeightKg, CultureInfo.InvariantCulture);
-        
+
         // If profile is null, create a new one
         if (_profile is null)
         {
@@ -98,8 +98,9 @@ public class EditProfileViewModel : ViewModelBase
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
-    
+
     // Validate the weight input
-    private static bool IsValidWeight(string weight) => 
-        double.TryParse(weight, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) && result is > 0 and < 300;
+    private static bool IsValidWeight(string weight) =>
+        double.TryParse(weight, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) &&
+        result is > 0 and < 300;
 }

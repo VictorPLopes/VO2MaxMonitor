@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
-using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using VO2MaxMonitor.Services;
 
@@ -16,11 +15,10 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class MainWindowViewModel : ViewModelBase
 {
-    private readonly IServiceProvider      _services;
-    private          ViewModelBase         _currentView;
-    private          FlyoutBase?           _profileFlyout;
-    private          MeasurementViewModel? _selectedMeasurement;
-    private          ProfileViewModel?     _selectedProfile;
+    private ViewModelBase         _currentView;
+    private FlyoutBase?           _profileFlyout;
+    private MeasurementViewModel? _selectedMeasurement;
+    private ProfileViewModel?     _selectedProfile;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -28,8 +26,6 @@ public class MainWindowViewModel : ViewModelBase
     /// <param name="services">The service provider for dependency injection.</param>
     public MainWindowViewModel(IServiceProvider services)
     {
-        _services = services ?? throw new ArgumentNullException(nameof(services));
-
         // Interaction with the delete confirmation dialog
         ShowConfirmDialog = new Interaction<ConfirmDialogViewModel, bool>();
 
@@ -40,7 +36,7 @@ public class MainWindowViewModel : ViewModelBase
 
         DownloadCsvCommand = ReactiveCommand.Create(ShowDownloadCsvView);
 
-        CurrentView = new WelcomeViewModel();
+        _currentView = new WelcomeViewModel();
 
         // Profile commands
         ShowProfileFlyoutCommand  = ReactiveCommand.Create(ShowProfileFlyout);
@@ -176,7 +172,7 @@ public class MainWindowViewModel : ViewModelBase
         SelectedMeasurement = null;
         CurrentView         = new NewMeasurementViewModel(this, new VO2MaxCalculator(1.225, 0.852, 20.93, 30000));
     }
-    
+
     private void ShowDownloadCsvView()
     {
         SelectedMeasurement = null;
@@ -186,7 +182,7 @@ public class MainWindowViewModel : ViewModelBase
     private void ShowProgressView()
     {
         SelectedMeasurement = null;
-        CurrentView         = new ProgressViewModel(SelectedProfile);
+        CurrentView         = new ProgressViewModel(SelectedProfile!);
     }
 
     // This is handled automatically by the Flyout in XAML

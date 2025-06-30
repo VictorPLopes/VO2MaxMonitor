@@ -33,14 +33,14 @@
             <Image Source="/Assets/vo2-max-monitor-logo.ico"
                    Width="16"
                    Height="16"
-                   Margin="0, 0, 0, 16"/>
+                   Margin="0, 0, 0, 16" />
             <!-- Title -->
             <TextBlock
-                       Theme="{DynamicResource CaptionTextBlockStyle}"
-                       FontSize="12"
-                       Margin="0"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                       Text="V̇O₂ Max Monitor" />
+                Theme="{DynamicResource CaptionTextBlockStyle}"
+                FontSize="12"
+                Margin="0"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Text="V̇O₂ Max Monitor" />
         </StackPanel>
 
         <!-- App Layout -->

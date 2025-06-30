@@ -9,9 +9,9 @@ namespace VO2MaxMonitor.ViewModels;
 public class ConfirmDialogViewModel : ViewModelBase
 {
     /// <summary>
-    ///     Gets or sets the title of the dialog.
+    ///     Initializes a new instance of the <see cref="ConfirmDialogViewModel" /> class.
     /// </summary>
-    public string Title { get; set; } = "Confirm";
+    public ConfirmDialogViewModel() => Title = "Confirm";
 
     /// <summary>
     ///     Gets or sets the message to display in the dialog.

@@ -15,8 +15,8 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class ProgressViewModel : ViewModelBase
 {
-    private static readonly SKColor PrimaryTextPaint   = GetThemedSKColor("TextFillColorPrimaryBrush");
-    private static readonly SKColor SecondaryTextPaint = GetThemedSKColor("TextFillColorSecondaryBrush");
+    private static readonly SKColor PrimaryTextPaint   = GetThemedSkColor("TextFillColorPrimaryBrush");
+    private static readonly SKColor SecondaryTextPaint = GetThemedSkColor("TextFillColorSecondaryBrush");
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ProgressViewModel" /> class.
@@ -33,10 +33,10 @@ public class ProgressViewModel : ViewModelBase
                 Values = profile.Model.Measurements
                                 .GroupBy(m => m.ExerciseDate.Date)
                                 .Select(g => g.OrderByDescending(m => m.VO2Max).FirstOrDefault())
-                                .OrderBy(m => m.ExerciseDate)
+                                .OrderBy(m => m?.ExerciseDate)
                                 .Take(30)
                                 .ToList()
-                                .Select(m => m.VO2Max)
+                                .Select(m => m!.VO2Max)
                                 .ToArray(), // Selects the maximum V̇O₂ for each day, for a maximum of 30 days
                 Name         = "V̇O₂ max (mL/min/kg)",
                 ScalesYAt    = 0,
@@ -47,10 +47,10 @@ public class ProgressViewModel : ViewModelBase
                 Values = profile.Model.Measurements
                                 .GroupBy(m => m.ExerciseDate.Date)
                                 .Select(g => g.OrderByDescending(m => m.VO2Max).FirstOrDefault())
-                                .OrderBy(m => m.ExerciseDate)
+                                .OrderBy(m => m?.ExerciseDate)
                                 .Take(30)
                                 .ToList()
-                                .Select(m => m.WeightKg)
+                                .Select(m => m!.WeightKg)
                                 .ToArray(), // Selects the weight for each day, for a maximum of 30 days
                 Name         = "Weight (kg)",
                 ScalesYAt    = 1,
@@ -64,10 +64,10 @@ public class ProgressViewModel : ViewModelBase
                 Labels = profile.Model.Measurements
                                 .GroupBy(m => m.ExerciseDate.Date)
                                 .Select(g => g.OrderByDescending(m => m.VO2Max).FirstOrDefault())
-                                .OrderBy(m => m.ExerciseDate)
+                                .OrderBy(m => m?.ExerciseDate)
                                 .Take(30)
                                 .ToList()
-                                .Select(m => m.ExerciseDate.ToString("g"))
+                                .Select(m => m!.ExerciseDate.ToString("g"))
                                 .ToArray(), // Selects the date for each day, for a maximum of 30 days
                 LabelsRotation = 15,
                 Name           = "Date",
@@ -112,7 +112,7 @@ public class ProgressViewModel : ViewModelBase
     ];
 
     // Helper function
-    private static SKColor GetThemedSKColor(string brushKey)
+    private static SKColor GetThemedSkColor(string brushKey)
     {
         var app = Application.Current;
         if (app is null)

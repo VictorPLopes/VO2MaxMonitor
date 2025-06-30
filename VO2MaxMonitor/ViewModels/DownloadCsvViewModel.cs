@@ -21,7 +21,6 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class DownloadCsvViewModel : ViewModelBase
 {
-    private readonly IFilesService       _filesService;
     private readonly MainWindowViewModel _mainVm;
     private readonly List<Reading>       _readings = [];
     private          string              _broker   = string.Empty;
@@ -258,7 +257,7 @@ public class DownloadCsvViewModel : ViewModelBase
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
-    
+
     private static bool IsValidPort(string port) =>
         int.TryParse(port, out var p) && p is > 0 and <= 65535 && port.Length <= 5;
 }

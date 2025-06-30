@@ -18,7 +18,6 @@ namespace VO2MaxMonitor.ViewModels;
 /// </summary>
 public class NewMeasurementViewModel : ViewModelBase
 {
-    private readonly IFilesService       _filesService;
     private readonly MainWindowViewModel _mainVm;
     private readonly IVO2MaxCalculator   _vo2Calculator;
     private          string              _exerciseType = string.Empty;
@@ -34,7 +33,7 @@ public class NewMeasurementViewModel : ViewModelBase
         IVO2MaxCalculator   vo2Calculator)
     {
         Title = "New Measurement";
-        
+
         _mainVm        = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
         _weightKg      = (mainVm.SelectedProfile?.WeightKg ?? 0).ToString(CultureInfo.InvariantCulture);
         _vo2Calculator = vo2Calculator ?? throw new ArgumentNullException(nameof(vo2Calculator));
@@ -114,10 +113,11 @@ public class NewMeasurementViewModel : ViewModelBase
         }
     }
 
+    // ReSharper disable once InconsistentNaming
     private void ComputeVO2Max()
     {
         var parsedWeight = double.Parse(WeightKg, CultureInfo.InvariantCulture);
-        
+
         // Update the weight in the selected profile if it exists
         if (_mainVm.SelectedProfile is not null)
             _mainVm.SelectedProfile.WeightKg = parsedWeight;
@@ -143,8 +143,9 @@ public class NewMeasurementViewModel : ViewModelBase
     }
 
     private void Cancel() => _mainVm.CurrentView = new WelcomeViewModel();
-    
+
     // Validate the weight input
-    private static bool IsValidWeight(string weight) => 
-        double.TryParse(weight, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) && result is > 0 and < 300;
+    private static bool IsValidWeight(string weight) =>
+        double.TryParse(weight, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) &&
+        result is > 0 and < 300;
 }

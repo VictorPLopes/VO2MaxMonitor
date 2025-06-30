@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Avalonia.Controls;
-using Avalonia.Input;
+﻿using Avalonia.Controls;
 
 namespace VO2MaxMonitor.Views;
 

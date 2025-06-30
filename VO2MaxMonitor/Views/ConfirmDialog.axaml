@@ -29,7 +29,7 @@
                 <TextBlock Text="{Binding Title}"
                            Theme="{DynamicResource SubtitleTextBlockStyle}"
                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                           FontSize="20"/>
+                           FontSize="20" />
                 <TextBlock Text="{Binding Message}"
                            TextWrapping="Wrap"
                            Theme="{DynamicResource BodyTextBlockStyle}"

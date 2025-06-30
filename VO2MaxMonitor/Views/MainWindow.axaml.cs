@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using Avalonia.Styling;
 using ReactiveUI;
@@ -15,16 +16,16 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     public MainWindow()
     {
         InitializeComponent();
-        
+
         SetBackgroundBasedOnTheme();
-        
+
         this.WhenActivated(disposables =>
         {
             disposables.Add(ViewModel!.ShowConfirmDialog.RegisterHandler(DoShowConfirmDialogAsync));
 
             // Set the flyout reference by getting it from the button
             var button = this.FindControl<Button>("ProfileButton");
-            ViewModel.SetFlyout(button.Flyout);
+            ViewModel.SetFlyout(button!.Flyout!);
         });
     }
 
@@ -60,7 +61,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         style.Add(setter);
         Styles.Add(style);
     }
-    
+
     private void SetBackgroundBasedOnTheme()
     {
         // Check the actual transparency level that was applied
@@ -68,9 +69,9 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         if (appliedTransparency == WindowTransparencyLevel.Mica) return;
         // Fallback color based on theme
-        var isDark = (ActualThemeVariant == ThemeVariant.Dark && Application.Current?.ActualThemeVariant == ThemeVariant.Dark);
+        var isDark = ActualThemeVariant == ThemeVariant.Dark &&
+                     Application.Current?.ActualThemeVariant == ThemeVariant.Dark;
 
-        Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(isDark ? "#FA202020" : "#FAF2F2F2"));
+        Background = new SolidColorBrush(Color.Parse(isDark ? "#FA202020" : "#FAF2F2F2"));
     }
-
 }
