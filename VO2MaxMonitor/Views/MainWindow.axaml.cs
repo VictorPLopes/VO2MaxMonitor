@@ -69,8 +69,9 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         if (appliedTransparency == WindowTransparencyLevel.Mica) return;
         // Fallback color based on theme
-        var isDark = ActualThemeVariant == ThemeVariant.Dark &&
-                     Application.Current?.ActualThemeVariant == ThemeVariant.Dark;
+        var isDark = ActualThemeVariant == ThemeVariant.Dark ||
+                     Application.Current?.ActualThemeVariant == ThemeVariant.Dark ||
+                     RequestedThemeVariant == ThemeVariant.Dark;
 
         Background = new SolidColorBrush(Color.Parse(isDark ? "#FA202020" : "#FAF2F2F2"));
     }
