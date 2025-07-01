@@ -146,7 +146,8 @@ The VO₂ max calculator uses these default parameters (customizable in code):
 - **Device Integration**: implement direct device communication via Bluetooth and/or USB for real-time data collection.
 - **Mobile Port**: create a mobile version for Android (and possibly iOS) to allow on-the-go measurements.
 - **Translation Support**: add localization for more languages (currently Portuguese is the only planned language).
-- **Data Export**: implement CSV export for measurement history.
+- **Data Export/Import**: implement CSV export/import for measurement history.
+- **Better Progress View**: allow the user to select a date range for the progress view.
 - **Manual Tweaking of Calculation Parameters**: allow users to adjust parameters like air density, dryness factor, and ambient O₂ percentage through the UI.
 - **More Robust Theming**: allow users to manually select between the light and dark theme regardless of system settings and make theming more consistent (especially on the charts).
 
