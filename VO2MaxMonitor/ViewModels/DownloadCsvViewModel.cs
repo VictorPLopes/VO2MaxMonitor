@@ -145,7 +145,7 @@ public class DownloadCsvViewModel : ViewModelBase
             if (file is null) return;
 
             // Get the file path
-            FilePath = file.Path.AbsolutePath;
+            FilePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
         }
         catch (Exception ex)
         {
