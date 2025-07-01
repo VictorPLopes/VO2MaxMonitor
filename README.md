@@ -73,12 +73,11 @@ Data can be provided either:
 ## Installation
 
 ### Requirements
-A 64-bit<sup>1</sup> install of Windows<sup>2</sup> 10/11, macOS<sup>3</sup>, or Linux<sup>4</sup>.
+A 64-bit<sup>1</sup> install of Windows 10/11, macOS<sup>2</sup>, or Linux<sup>3</sup>.
 
 <sub><sup><sup>1</sup> ARM-based systems haven't been tested yet. Currently, only x86_64 has been tested.</sub></sup> <br>
-<sub><sup><sup>2</sup> Windows 10 should be compatible, but has not been tested yet. The app takes advantage of Mica effects, which are only available in Windows 11.</sub></sup> <br>
-<sub><sup><sup>3</sup> macOS support is theoretical and has not been tested yet (I do not have any Apple devices).</sub></sup> <br>
-<sub><sup><sup>4</sup> Tested on Kubuntu 25.04, should work on other distributions with .NET 9.0 support, but more advanced graphical features such as blurred backgrounds may not work on all Linux desktop environments (works on KDE Plasma).</sub></sup>
+<sub><sup><sup>2</sup> macOS support is theoretical and has not been tested yet (I do not have any Apple devices).</sub></sup> <br>
+<sub><sup><sup>3</sup> Tested on Kubuntu 25.04, should work on other distributions with .NET 9.0 support, but more advanced graphical features such as blurred backgrounds may not work on all Linux desktop environments (works on KDE Plasma).</sub></sup>
 
 ### Download
 Pre-built binaries are available in the [Releases](https://github.com/VictorPLopes/VO2MaxMonitor/releases) section.
